@@ -1,0 +1,31 @@
+const API_URL = "http://localhost:5000";
+
+async function handleGoogleLogin(response) {
+    try {
+        const res = await fetch(`${API_URL}/api/auth/google`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                credential: response.credential
+            })
+        });
+
+        const data = await res.json();
+
+        if (!res.ok) {
+            alert(data.message || "Login failed");
+            return;
+        }
+
+        localStorage.setItem("sms_token", data.token);
+        localStorage.setItem("sms_user", JSON.stringify(data.user));
+
+        window.location.href = "dashboard.html";
+
+    } catch (error) {
+        console.log(error);
+        alert("Something went wrong");
+    }
+}

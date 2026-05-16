@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Dashboard | Student Management</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <main class="dashboard">
+
+        <aside class="sidebar">
+            <div>
+                <h2>🎓 SMS</h2>
+                <p>Student Panel</p>
+            </div>
+
+            <button onclick="logout()" class="logout-btn">Logout</button>
+        </aside>
+
+        <section class="main-content">
+
+            <header class="topbar">
+                <div>
+                    <h1>Student Dashboard</h1>
+                    <p id="userInfo">Welcome back</p>
+                </div>
+
+                <input type="text" id="searchInput" placeholder="Search student..." oninput="searchStudents()">
+            </header>
+
+            <section class="stats">
+                <div class="stat-card">
+                    <h3>Total Students</h3>
+                    <p id="totalStudents">0</p>
+                </div>
+
+                <div class="stat-card">
+                    <h3>Courses</h3>
+                    <p>BCA / B.Sc / BBA</p>
+                </div>
+
+                <div class="stat-card">
+                    <h3>Status</h3>
+                    <p>Active</p>
+                </div>
+            </section>
+
+            <section class="form-section">
+                <h2 id="formTitle">Add Student</h2>
+
+                <form id="studentForm">
+                    <input type="hidden" id="studentId">
+
+                    <input type="text" id="name" placeholder="Student Name" required>
+                    <input type="text" id="rollNo" placeholder="Roll Number" required>
+                    <input type="text" id="course" placeholder="Course" required>
+                    <input type="text" id="semester" placeholder="Semester" required>
+                    <input type="email" id="email" placeholder="Email">
+                    <input type="text" id="phone" placeholder="Phone">
+                    <input type="text" id="address" placeholder="Address">
+
+                    <button type="submit" id="submitBtn">Add Student</button>
+                </form>
+            </section>
+
+            <section class="table-section">
+                <h2>Student Records</h2>
+
+                <div class="table-wrapper">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Roll No</th>
+                                <th>Course</th>
+                                <th>Semester</th>
+                                <th>Email</th>
+                                <th>Phone</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+
+                        <tbody id="studentTable"></tbody>
+                    </table>
+                </div>
+            </section>
+
+        </section>
+
+    </main>
+
+    <script src="dashboard.js"></script>
+</body>
+</html>

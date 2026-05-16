@@ -14,6 +14,27 @@ const searchInput = document.getElementById("searchInput");
 const courseFilter = document.getElementById("courseFilter");
 const semesterFilter = document.getElementById("semesterFilter");
 const userInfo = document.getElementById("userInfo");
+const formSection = document.getElementById("formSection");
+const photoInput = document.getElementById("photo");
+const photoPreview = document.getElementById("photoPreview");
+
+let photoBase64 = "";
+
+photoInput.addEventListener("change", () => {
+    const file = photoInput.files[0];
+
+    if (!file) return;
+
+    const reader = new FileReader();
+
+    reader.onload = () => {
+        photoBase64 = reader.result;
+        photoPreview.src = photoBase64;
+        photoPreview.style.display = "block";
+    };
+
+    reader.readAsDataURL(file);
+});
 
 let students = [];
 
@@ -34,6 +55,7 @@ studentForm.addEventListener("submit", async (e) => {
         email: document.getElementById("email").value,
         phone: document.getElementById("phone").value,
         address: document.getElementById("address").value,
+        photo: photoBase64,
 
         attendance: {
             present: Number(document.getElementById("present").value) || 0,
@@ -58,6 +80,7 @@ studentForm.addEventListener("submit", async (e) => {
     document.getElementById("formTitle").innerText = "Add Student";
     document.getElementById("submitBtn").innerText = "Add Student";
 
+    cancelForm();
     fetchStudents();
 });
 
@@ -120,6 +143,7 @@ function renderStudents(data) {
         else if (percentage >= 40) grade = "C";
 
         tr.innerHTML = `
+            <td>${student.photo ? `<img src="${student.photo}" class="table-photo">` : "No Photo"}</td>
             <td>${student.name}</td>
             <td>${student.rollNo}</td>
             <td>${student.course}</td>
@@ -127,7 +151,7 @@ function renderStudents(data) {
             <td>${present}/${totalDays} (${attendancePercent}%)</td>
             <td>${percentage}%</td>
             <td><span class="grade">${grade}</span></td>
-            <td>
+            <td class="no-print">
                 <button class="edit-btn" onclick='editStudent(${JSON.stringify(student)})'>Edit</button>
                 <button class="delete-btn" onclick="deleteStudent('${student._id}')">Delete</button>
                 <button class="id-btn" onclick='printIdCard(${JSON.stringify(student)})'>ID Card</button>
@@ -139,6 +163,7 @@ function renderStudents(data) {
 }
 
 function editStudent(student) {
+    formSection.classList.remove("hidden");
     document.getElementById("studentId").value = student._id;
     document.getElementById("name").value = student.name;
     document.getElementById("rollNo").value = student.rollNo;
@@ -147,6 +172,15 @@ function editStudent(student) {
     document.getElementById("email").value = student.email || "";
     document.getElementById("phone").value = student.phone || "";
     document.getElementById("address").value = student.address || "";
+    photoBase64 = student.photo || "";
+
+    if (student.photo) {
+        photoPreview.src = student.photo;
+        photoPreview.style.display = "block";
+    } else {
+        photoPreview.src = "";
+        photoPreview.style.display = "none";
+    }
     document.getElementById("present").value = student.attendance?.present || "";
     document.getElementById("total").value = student.attendance?.total || "";
 
@@ -318,6 +352,25 @@ function applyFilters() {
     });
 
     renderStudents(filtered);
+}
+
+function showStudentForm() {
+    formSection.classList.remove("hidden");
+    document.getElementById("formTitle").innerText = "Add Student";
+    document.getElementById("submitBtn").innerText = "Add Student";
+}
+
+function cancelForm() {
+    studentForm.reset();
+    document.getElementById("studentId").value = "";
+    document.getElementById("formTitle").innerText = "Add Student";
+    document.getElementById("submitBtn").innerText = "Add Student";
+
+    photoBase64 = "";
+    photoPreview.src = "";
+    photoPreview.style.display = "none";
+
+    formSection.classList.add("hidden");
 }
 
 function logout() {

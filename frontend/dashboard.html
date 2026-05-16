@@ -52,7 +52,8 @@
                 </div>
             </section>
 
-            <section class="form-section">
+            <button class="show-form-btn" onclick="showStudentForm()">+ Add Student</button>
+            <section class="form-section hidden" id="formSection">
                 <h2 id="formTitle">Add Student</h2>
 
                 <form id="studentForm">
@@ -65,6 +66,8 @@
                     <input type="email" id="email" placeholder="Email">
                     <input type="text" id="phone" placeholder="Phone">
                     <input type="text" id="address" placeholder="Address">
+                    <input type="file" id="photo" accept="image/*" onchange="previewPhoto()">
+                    <img id="photoPreview" class="photo-preview" style="display:none;">
                     <input type="number" id="present" placeholder="Present Days">
                     <input type="number" id="total" placeholder="Total Days">
                     <input type="number" id="subject1" placeholder="Subject 1 Marks">
@@ -72,6 +75,7 @@
                     <input type="number" id="subject3" placeholder="Subject 3 Marks">
 
                     <button type="submit" id="submitBtn">Add Student</button>
+                    <button type="button" class="cancel-btn" onclick="cancelForm()">Cancel</button>
                 </form>
             </section>
 
@@ -83,6 +87,7 @@
                     <table>
                         <thead>
                             <tr>
+                                <th>Photo</th>
                                 <th>Name</th>
                                 <th>Roll No</th>
                                 <th>Course</th>
@@ -90,7 +95,7 @@
                                 <th>Attendance</th>
                                 <th>Percentage</th>
                                 <th>Grade</th>
-                                <th>Action</th>
+                                <th class="no-print">Action</th>
                             </tr>
                         </thead>
 

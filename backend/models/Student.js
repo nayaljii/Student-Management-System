@@ -8,6 +8,7 @@ const studentSchema = new mongoose.Schema({
     email: String,
     phone: String,
     address: String,
+    photo: String,
 
     attendance: {
         present: { type: Number, default: 0 },

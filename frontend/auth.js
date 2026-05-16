@@ -1,4 +1,4 @@
-const API_URL = "http://localhost:5000";
+const API_URL = "https://student-management-system-ktlq.onrender.com";
 
 async function handleGoogleLogin(response) {
     try {

@@ -94,7 +94,16 @@ async function addStudent(studentData) {
         body: JSON.stringify(studentData)
     });
 
-    const data = await res.json();
+    const text = await res.text();
+
+    let data;
+    try {
+        data = JSON.parse(text);
+    } catch {
+        alert("Server error: Photo size is too large or backend returned HTML.");
+        return;
+    }
+
     alert(data.message);
 }
 
@@ -207,7 +216,16 @@ async function updateStudent(id, studentData) {
         body: JSON.stringify(studentData)
     });
 
-    const data = await res.json();
+    const text = await res.text();
+
+    let data;
+    try {
+        data = JSON.parse(text);
+    } catch {
+        alert("Server error: Photo size is too large or backend returned HTML.");
+        return;
+    }
+
     alert(data.message);
 }
 
@@ -275,6 +293,16 @@ function printIdCard(student) {
                     font-weight: bold;
                 }
 
+                .id-photo {
+                    width: 95px;
+                    height: 95px;
+                    border-radius: 50%;
+                    object-fit: cover;
+                    margin: 20px auto;
+                    display: block;
+                    border: 4px solid #dbeafe;
+                }
+
                 .info {
                     padding: 0 25px 25px;
                     text-align: left;
@@ -304,7 +332,11 @@ function printIdCard(student) {
                     <p>Student ID Card</p>
                 </div>
 
-                <div class="avatar">${student.name.charAt(0).toUpperCase()}</div>
+                ${
+                    student.photo
+                        ? `<img src="${student.photo}" class="id-photo">`
+                        : `<div class="avatar">${student.name.charAt(0).toUpperCase()}</div>`
+                }
 
                 <div class="info">
                     <p><strong>Name:</strong> ${student.name}</p>

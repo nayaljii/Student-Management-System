@@ -61,6 +61,11 @@
                     <input type="email" id="email" placeholder="Email">
                     <input type="text" id="phone" placeholder="Phone">
                     <input type="text" id="address" placeholder="Address">
+                    <input type="number" id="present" placeholder="Present Days">
+                    <input type="number" id="total" placeholder="Total Days">
+                    <input type="number" id="subject1" placeholder="Subject 1 Marks">
+                    <input type="number" id="subject2" placeholder="Subject 2 Marks">
+                    <input type="number" id="subject3" placeholder="Subject 3 Marks">
 
                     <button type="submit" id="submitBtn">Add Student</button>
                 </form>
@@ -68,6 +73,7 @@
 
             <section class="table-section">
                 <h2>Student Records</h2>
+                <button class="print-btn" onclick="window.print()">Export / Print PDF</button>
 
                 <div class="table-wrapper">
                     <table>
@@ -77,8 +83,9 @@
                                 <th>Roll No</th>
                                 <th>Course</th>
                                 <th>Semester</th>
-                                <th>Email</th>
-                                <th>Phone</th>
+                                <th>Attendance</th>
+                                <th>Percentage</th>
+                                <th>Grade</th>
                                 <th>Action</th>
                             </tr>
                         </thead>

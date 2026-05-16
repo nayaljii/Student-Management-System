@@ -31,7 +31,18 @@ studentForm.addEventListener("submit", async (e) => {
         semester: document.getElementById("semester").value,
         email: document.getElementById("email").value,
         phone: document.getElementById("phone").value,
-        address: document.getElementById("address").value
+        address: document.getElementById("address").value,
+
+        attendance: {
+            present: Number(document.getElementById("present").value) || 0,
+            total: Number(document.getElementById("total").value) || 0
+        },
+
+        marks: {
+            subject1: Number(document.getElementById("subject1").value) || 0,
+            subject2: Number(document.getElementById("subject2").value) || 0,
+            subject3: Number(document.getElementById("subject3").value) || 0
+        }
     };
 
     if (studentId) {
@@ -91,13 +102,29 @@ function renderStudents(data) {
     data.forEach((student) => {
         const tr = document.createElement("tr");
 
+        const present = student.attendance?.present || 0;
+        const totalDays = student.attendance?.total || 0;
+        const attendancePercent = totalDays > 0 ? ((present / totalDays) * 100).toFixed(1) : 0;
+
+        const s1 = student.marks?.subject1 || 0;
+        const s2 = student.marks?.subject2 || 0;
+        const s3 = student.marks?.subject3 || 0;
+
+        const percentage = ((s1 + s2 + s3) / 300 * 100).toFixed(1);
+
+        let grade = "Fail";
+        if (percentage >= 80) grade = "A";
+        else if (percentage >= 60) grade = "B";
+        else if (percentage >= 40) grade = "C";
+
         tr.innerHTML = `
             <td>${student.name}</td>
             <td>${student.rollNo}</td>
             <td>${student.course}</td>
             <td>${student.semester}</td>
-            <td>${student.email || "-"}</td>
-            <td>${student.phone || "-"}</td>
+            <td>${present}/${totalDays} (${attendancePercent}%)</td>
+            <td>${percentage}%</td>
+            <td><span class="grade">${grade}</span></td>
             <td>
                 <button class="edit-btn" onclick='editStudent(${JSON.stringify(student)})'>Edit</button>
                 <button class="delete-btn" onclick="deleteStudent('${student._id}')">Delete</button>
@@ -117,6 +144,12 @@ function editStudent(student) {
     document.getElementById("email").value = student.email || "";
     document.getElementById("phone").value = student.phone || "";
     document.getElementById("address").value = student.address || "";
+    document.getElementById("present").value = student.attendance?.present || "";
+    document.getElementById("total").value = student.attendance?.total || "";
+
+    document.getElementById("subject1").value = student.marks?.subject1 || "";
+    document.getElementById("subject2").value = student.marks?.subject2 || "";
+    document.getElementById("subject3").value = student.marks?.subject3 || "";
 
     document.getElementById("formTitle").innerText = "Update Student";
     document.getElementById("submitBtn").innerText = "Update Student";

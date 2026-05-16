@@ -6,6 +6,16 @@ const router = express.Router();
 
 router.post("/", authMiddleware, async (req, res) => {
     try {
+        const existingStudent = await Student.findOne({
+            rollNo: req.body.rollNo,
+            createdBy: req.user.id
+        });
+
+        if (existingStudent) {
+            return res.status(400).json({
+                message: "This roll number already exists"
+            });
+        }
         const student = await Student.create({
             ...req.body,
             createdBy: req.user.id

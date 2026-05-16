@@ -275,32 +275,71 @@ td {
     font-weight: bold;
 }
 
+.filter-box {
+    display: flex;
+    gap: 10px;
+}
+
+.filter-box input {
+    width: 170px;
+    padding: 12px 14px;
+    border-radius: 14px;
+    border: 1px solid rgba(255,255,255,0.15);
+    outline: none;
+    background: rgba(255,255,255,0.08);
+    color: #fff;
+}
+
+.filter-box input::placeholder {
+    color: #94a3b8;
+}
+
+.id-btn {
+    border: none;
+    padding: 8px 12px;
+    border-radius: 10px;
+    color: #fff;
+    cursor: pointer;
+    background: #7c3aed;
+    margin-top: 6px;
+}
+
 @media print {
-    .sidebar,
-    .topbar,
-    .form-section,
+    body * {
+        visibility: hidden;
+    }
+
+    .table-section,
+    .table-section * {
+        visibility: visible;
+    }
+
+    .table-section {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 100%;
+        background: white !important;
+        color: black !important;
+        box-shadow: none !important;
+        border: none !important;
+    }
+
     .print-btn,
     .edit-btn,
     .delete-btn {
         display: none !important;
     }
 
-    body {
-        background: white;
-        color: black;
-    }
-
-    .main-content,
-    .table-section {
-        background: white;
-        color: black;
-        box-shadow: none;
+    table {
+        width: 100%;
+        min-width: 100%;
     }
 
     th,
     td {
-        color: black;
-        border-bottom: 1px solid #ccc;
+        color: black !important;
+        border-bottom: 1px solid #ccc !important;
     }
 }
 
@@ -330,5 +369,14 @@ td {
 
     form {
         grid-template-columns: 1fr;
+    }
+
+    .filter-box {
+        width: 100%;
+        flex-direction: column;
+    }
+
+    .filter-box input {
+        width: 100%;
     }
 }

@@ -466,6 +466,8 @@ function closeAbout() {
 function toggleSidebar() {
     document.querySelector(".sidebar").classList.toggle("show-sidebar");
     document.getElementById("sidebarOverlay").classList.toggle("hidden");
+
+    document.body.classList.toggle("sidebar-open");
 }
 
 function showToast(message, type = "success") {
@@ -598,3 +600,11 @@ function logout() {
 }
 
 fetchStudents();
+
+document.addEventListener("click", (e) => {
+    const profileBox = document.querySelector(".profile-box");
+
+    if (!profileBox.contains(e.target)) {
+        document.getElementById("profileMenu").classList.add("hidden");
+    }
+});

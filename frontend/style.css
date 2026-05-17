@@ -72,14 +72,16 @@ body {
 }
 
 .sidebar {
-    width: 280px;
-    padding: 28px 22px;
-    background: rgba(2, 6, 23, 0.86);
-    backdrop-filter: blur(18px);
-    border-right: 1px solid rgba(255,255,255,0.09);
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
+    position: fixed;
+    right: -290px;
+    top: 14px;
+    width: 250px;
+    height: auto;
+    max-height: 300px;
+    border-radius: 22px 0 0 22px;
+    z-index: 999;
+    transition: 0.3s ease;
+    padding: 22px 18px;
 }
 
 .brand {
@@ -111,6 +113,7 @@ body {
 .side-actions {
     display: grid;
     gap: 12px;
+    margin: 22px 0;
 }
 
 .about-btn,
@@ -437,8 +440,10 @@ tbody tr td:last-child {
 .mobile-topbar {
     display: none;
     align-items: center;
-    gap: 14px;
-    margin-bottom: 24px;
+    justify-content: space-between;
+    gap: 10px;
+    margin-bottom: 10px;
+    margin-top: -6px;
 }
 
 .mobile-brand {
@@ -462,6 +467,7 @@ tbody tr td:last-child {
     display: none;
     width: 46px;
     height: 46px;
+    margin-left: auto;
     border: none;
     border-radius: 14px;
     background: linear-gradient(135deg, #2563eb, #7c3aed);
@@ -551,11 +557,11 @@ tbody tr td:last-child {
     }
 
     .sidebar.show-sidebar {
-        left: 0;
+        right: 0;
     }
 
     .main-content {
-        padding: 82px 18px 24px;
+        padding: 18px 18px 24px;
     }
 
     .topbar {

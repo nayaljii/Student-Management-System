@@ -11,8 +11,6 @@ const studentForm = document.getElementById("studentForm");
 const studentTable = document.getElementById("studentTable");
 const totalStudents = document.getElementById("totalStudents");
 const searchInput = document.getElementById("searchInput");
-const courseFilter = document.getElementById("courseFilter");
-const semesterFilter = document.getElementById("semesterFilter");
 const userInfo = document.getElementById("userInfo");
 const formSection = document.getElementById("formSection");
 const photoInput = document.getElementById("photo");
@@ -386,19 +384,14 @@ function searchStudents() {
 
 function applyFilters() {
     const searchValue = searchInput.value.toLowerCase();
-    const courseValue = courseFilter.value.toLowerCase();
-    const semesterValue = semesterFilter.value.toLowerCase();
 
     const filtered = students.filter((student) => {
-        const matchSearch =
+        return (
             student.name.toLowerCase().includes(searchValue) ||
             student.rollNo.toLowerCase().includes(searchValue) ||
-            student.course.toLowerCase().includes(searchValue);
-
-        const matchCourse = student.course.toLowerCase().includes(courseValue);
-        const matchSemester = student.semester.toLowerCase().includes(semesterValue);
-
-        return matchSearch && matchCourse && matchSemester;
+            student.course.toLowerCase().includes(searchValue) ||
+            student.semester.toLowerCase().includes(searchValue)
+        );
     });
 
     renderStudents(filtered);

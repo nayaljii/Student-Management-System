@@ -434,12 +434,32 @@ tbody tr td:last-child {
 }
 
 /* Mobile Sidebar */
+.mobile-topbar {
+    display: none;
+    align-items: center;
+    gap: 14px;
+    margin-bottom: 24px;
+}
+
+.mobile-brand {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.mobile-brand h2 {
+    font-size: 22px;
+    line-height: 1;
+}
+
+.mobile-brand p {
+    color: #94a3b8;
+    margin-top: 4px;
+    font-size: 14px;
+}
+
 .menu-btn {
     display: none;
-    position: fixed;
-    top: 18px;
-    left: 18px;
-    z-index: 1001;
     width: 46px;
     height: 46px;
     border: none;
@@ -448,6 +468,7 @@ tbody tr td:last-child {
     color: white;
     font-size: 22px;
     cursor: pointer;
+    flex-shrink: 0;
 }
 
 .sidebar-overlay {
@@ -503,6 +524,14 @@ tbody tr td:last-child {
 
 /* Responsive */
 @media (max-width: 900px) {
+    .mobile-topbar {
+        display: flex;
+    }
+
+    .sidebar .brand {
+        display: none;
+    }
+
     .menu-btn {
         display: block;
     }

@@ -21,14 +21,26 @@
 
     <div id="toast" class="toast hidden"></div>
     <main class="dashboard">
-        <button class="menu-btn" onclick="toggleSidebar()">☰</button>
+        <div class="mobile-topbar">
+            <button class="menu-btn" onclick="toggleSidebar()">☰</button>
 
+            <div class="mobile-brand">
+                <div class="brand-logo">🎓</div>
+
+                <div>
+                    <h2>Student Info</h2>
+                    <p>Student Panel</p>
+                    <p id="liveClock" class="live-clock"></p>
+                </div>
+            </div>
+        </div>
         <aside class="sidebar">
             <div class="brand">
                 <div class="brand-logo">🎓</div>
                 <div>
                     <h2>Student Info</h2>
                     <p>Student Panel</p>
+                    <p id="liveClock" class="live-clock"></p>
                 </div>
             </div>
 
@@ -42,7 +54,6 @@
         <section class="main-content">
             <header class="topbar">
                 <div>
-                    <p id="liveClock" class="live-clock"></p>
                     <h1>Student Dashboard</h1>
                     <p id="userInfo">Welcome back</p>
                 </div>

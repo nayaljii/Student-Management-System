@@ -344,6 +344,104 @@ td {
     object-fit: cover;
 }
 
+.theme-btn,
+.about-btn,
+.menu-btn {
+    border: none;
+    padding: 13px 18px;
+    border-radius: 14px;
+    background: linear-gradient(135deg, #2563eb, #7c3aed);
+    color: white;
+    font-weight: bold;
+    cursor: pointer;
+    margin-bottom: 12px;
+}
+
+.menu-btn {
+    display: none;
+    margin-bottom: 15px;
+}
+
+.live-clock {
+    color: #93c5fd;
+    font-weight: bold;
+}
+
+.about-modal {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.65);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 999;
+}
+
+.about-box {
+    width: 90%;
+    max-width: 420px;
+    background: #111827;
+    color: white;
+    padding: 30px;
+    border-radius: 24px;
+    box-shadow: 0 25px 70px rgba(0,0,0,0.5);
+}
+
+.about-box p {
+    margin: 12px 0;
+    color: #cbd5e1;
+}
+
+.about-box button {
+    margin-top: 15px;
+    border: none;
+    padding: 12px 18px;
+    border-radius: 12px;
+    background: #2563eb;
+    color: white;
+    cursor: pointer;
+}
+
+.toast {
+    position: fixed;
+    right: 25px;
+    bottom: 25px;
+    padding: 14px 22px;
+    border-radius: 14px;
+    background: #22c55e;
+    color: white;
+    font-weight: bold;
+    z-index: 1000;
+    box-shadow: 0 15px 40px rgba(0,0,0,0.35);
+}
+
+.toast.error {
+    background: #ef4444;
+}
+
+.light-theme {
+    background: #f1f5f9;
+    color: #111827;
+}
+
+.light-theme .main-content,
+.light-theme .form-section,
+.light-theme .table-section,
+.light-theme .stat-card {
+    background: white !important;
+    color: #111827 !important;
+}
+
+.light-theme input,
+.light-theme td {
+    color: #111827 !important;
+}
+
+.light-theme .sidebar {
+    background: #ffffff;
+    color: #111827;
+}
+
 @media print {
     body * {
         visibility: hidden;
@@ -423,4 +521,17 @@ td {
     .filter-box input {
         width: 100%;
     }
+
+    .menu-btn {
+        display: inline-block;
+    }
+
+    .sidebar {
+        display: none;
+    }
+
+    .sidebar.show-sidebar {
+        display: flex;
+    }
+
 }

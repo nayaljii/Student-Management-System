@@ -8,31 +8,43 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
+    <div class="about-modal hidden" id="aboutModal">
+        <div class="about-box">
+            <h2>👨‍💻 About Developer</h2>
+            <p><b>Developed By:</b> Vishal Nayal</p>
+            <p><b>Project:</b> Student Management System</p>
+            <p><b>Features:</b> Google Login, CRUD, Attendance, Marks, ID Card, PDF Export</p>
+            <button onclick="closeAbout()">Close</button>
+        </div>
+    </div>
 
+    <div id="toast" class="toast hidden"></div>
     <main class="dashboard">
 
         <aside class="sidebar">
             <div>
-                <h2>🎓 SMS</h2>
+                <h2>🎓 Student Info</h2>
                 <p>Student Panel</p>
             </div>
-
+            <button class="theme-btn" onclick="toggleTheme()">🌗</button>
+            <button class="about-btn" onclick="openAbout()">👨‍💻 About</button>
             <button onclick="logout()" class="logout-btn">Logout</button>
         </aside>
 
         <section class="main-content">
-
+            <button class="menu-btn" onclick="toggleSidebar()">☰ Menu</button>
             <header class="topbar">
                 <div>
                     <h1>Student Dashboard</h1>
                     <p id="userInfo">Welcome back</p>
                 </div>
 
-                <input type="text" id="searchInput" placeholder="Search student..." oninput="searchStudents()">
                 <div class="filter-box">
+                    <input type="text" id="searchInput" placeholder="Search student..." oninput="searchStudents()">
                     <input type="text" id="courseFilter" placeholder="Filter by course" oninput="applyFilters()">
                     <input type="text" id="semesterFilter" placeholder="Filter by semester" oninput="applyFilters()">
                 </div>
+                <p id="liveClock" class="live-clock"></p>
             </header>
 
             <section class="stats">
@@ -95,6 +107,7 @@
                                 <th>Attendance</th>
                                 <th>Percentage</th>
                                 <th>Grade</th>
+                                <th>Reg. Date</th>
                                 <th class="no-print">Action</th>
                             </tr>
                         </thead>

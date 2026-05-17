@@ -27,10 +27,27 @@ photoInput.addEventListener("change", () => {
 
     const reader = new FileReader();
 
-    reader.onload = () => {
-        photoBase64 = reader.result;
-        photoPreview.src = photoBase64;
-        photoPreview.style.display = "block";
+    reader.onload = (e) => {
+        const img = new Image();
+
+        img.onload = () => {
+            const canvas = document.createElement("canvas");
+            const maxWidth = 300;
+            const scale = maxWidth / img.width;
+
+            canvas.width = maxWidth;
+            canvas.height = img.height * scale;
+
+            const ctx = canvas.getContext("2d");
+            ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+
+            photoBase64 = canvas.toDataURL("image/jpeg", 0.6);
+
+            photoPreview.src = photoBase64;
+            photoPreview.style.display = "block";
+        };
+
+        img.src = e.target.result;
     };
 
     reader.readAsDataURL(file);
@@ -100,11 +117,11 @@ async function addStudent(studentData) {
     try {
         data = JSON.parse(text);
     } catch {
-        alert("Server error: Photo size is too large or backend returned HTML.");
+        showToast("Photo size is too large or backend returned HTML.", "error");
         return;
     }
 
-    alert(data.message);
+    showToast(data.message || "Done successfully");
 }
 
 async function fetchStudents() {
@@ -160,6 +177,7 @@ function renderStudents(data) {
             <td>${present}/${totalDays} (${attendancePercent}%)</td>
             <td>${percentage}%</td>
             <td><span class="grade">${grade}</span></td>
+            <td>${new Date(student.createdAt).toLocaleDateString("en-IN")}</td>
             <td class="no-print">
                 <button class="edit-btn" onclick='editStudent(${JSON.stringify(student)})'>Edit</button>
                 <button class="delete-btn" onclick="deleteStudent('${student._id}')">Delete</button>
@@ -222,11 +240,11 @@ async function updateStudent(id, studentData) {
     try {
         data = JSON.parse(text);
     } catch {
-        alert("Server error: Photo size is too large or backend returned HTML.");
+        showToast("Photo size is too large or backend returned HTML.", "error");
         return;
     }
 
-    alert(data.message);
+    showToast(data.message || "Done successfully");
 }
 
 async function deleteStudent(id) {
@@ -242,7 +260,7 @@ async function deleteStudent(id) {
     });
 
     const data = await res.json();
-    alert(data.message);
+    showToast(data.message || "Done successfully");
 
     fetchStudents();
 }
@@ -403,6 +421,56 @@ function cancelForm() {
     photoPreview.style.display = "none";
 
     formSection.classList.add("hidden");
+}
+
+function updateClock() {
+    const clock = document.getElementById("liveClock");
+    const now = new Date();
+
+    clock.innerText = now.toLocaleString("en-IN", {
+        dateStyle: "medium",
+        timeStyle: "medium"
+    });
+}
+
+setInterval(updateClock, 1000);
+updateClock();
+
+function toggleTheme() {
+    document.body.classList.toggle("light-theme");
+
+    if (document.body.classList.contains("light-theme")) {
+        localStorage.setItem("sms_theme", "light");
+    } else {
+        localStorage.setItem("sms_theme", "dark");
+    }
+}
+
+if (localStorage.getItem("sms_theme") === "light") {
+    document.body.classList.add("light-theme");
+}
+
+function openAbout() {
+    document.getElementById("aboutModal").classList.remove("hidden");
+}
+
+function closeAbout() {
+    document.getElementById("aboutModal").classList.add("hidden");
+}
+
+function toggleSidebar() {
+    document.querySelector(".sidebar").classList.toggle("show-sidebar");
+}
+
+function showToast(message, type = "success") {
+    const toast = document.getElementById("toast");
+
+    toast.innerText = message;
+    toast.className = `toast ${type}`;
+
+    setTimeout(() => {
+        toast.className = "toast hidden";
+    }, 2500);
 }
 
 function logout() {

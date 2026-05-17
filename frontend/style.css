@@ -474,6 +474,149 @@ tbody tr td:last-child {
     z-index: 998;
 }
 
+.csv-btn {
+    border: none;
+    padding: 15px 24px;
+    border-radius: 16px;
+    background: linear-gradient(135deg, #f59e0b, #f97316);
+    color: white;
+    font-weight: 800;
+    cursor: pointer;
+    margin-left: 10px;
+    margin-bottom: 20px;
+}
+
+.low-attendance,
+.topper-badge {
+    display: inline-block;
+    padding: 6px 10px;
+    border-radius: 999px;
+    font-size: 12px;
+    font-weight: bold;
+    margin: 3px;
+}
+
+.low-attendance {
+    background: rgba(239, 68, 68, 0.2);
+    color: #fca5a5;
+}
+
+.topper-badge {
+    background: rgba(245, 158, 11, 0.2);
+    color: #fbbf24;
+}
+
+.student-modal {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.65);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1200;
+}
+
+.student-box {
+    width: 90%;
+    max-width: 430px;
+    background: #111827;
+    border-radius: 24px;
+    padding: 28px;
+    position: relative;
+    box-shadow: 0 25px 70px rgba(0,0,0,0.5);
+}
+
+.close-modal {
+    position: absolute;
+    right: 18px;
+    top: 14px;
+    border: none;
+    background: #ef4444;
+    color: white;
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    cursor: pointer;
+}
+
+.modal-photo {
+    width: 95px;
+    height: 95px;
+    border-radius: 50%;
+    object-fit: cover;
+    display: block;
+    margin: 0 auto 15px;
+}
+
+.student-box h2 {
+    text-align: center;
+    margin-bottom: 15px;
+}
+
+.student-box p {
+    margin: 10px 0;
+    color: #cbd5e1;
+}
+
+.profile-box {
+    position: relative;
+}
+
+.profile-btn {
+    border: none;
+    padding: 14px 18px;
+    border-radius: 16px;
+    background: linear-gradient(135deg, #2563eb, #7c3aed);
+    color: white;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.profile-menu {
+    position: absolute;
+    right: 0;
+    top: 55px;
+    width: 190px;
+    padding: 14px;
+    border-radius: 18px;
+    background: #111827;
+    box-shadow: 0 18px 45px rgba(0,0,0,0.35);
+    z-index: 900;
+}
+
+.profile-menu p {
+    margin-bottom: 10px;
+    color: #cbd5e1;
+}
+
+.profile-menu button {
+    width: 100%;
+    margin-top: 8px;
+    padding: 10px;
+    border: none;
+    border-radius: 12px;
+    color: white;
+    background: #2563eb;
+    cursor: pointer;
+}
+
+.pagination {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 14px;
+    margin-top: 20px;
+}
+
+.pagination button {
+    border: none;
+    padding: 10px 16px;
+    border-radius: 12px;
+    background: #2563eb;
+    color: white;
+    cursor: pointer;
+}
+
 /* Print */
 @media print {
     body * {
@@ -584,5 +727,24 @@ tbody tr td:last-child {
 
     .table-section {
         padding: 20px;
+    }
+
+    .csv-btn {
+        margin-left: 0;
+        width: 100%;
+    }
+
+    .profile-box {
+        width: 100%;
+    }
+
+    .profile-btn {
+        width: 100%;
+    }
+
+    .profile-menu {
+        left: 0;
+        right: auto;
+        width: 100%;
     }
 }

@@ -19,6 +19,14 @@
     </div>
 
     <div id="toast" class="toast hidden"></div>
+
+    <div class="student-modal hidden" id="studentModal">
+        <div class="student-box">
+            <button class="close-modal" onclick="closeStudentModal()">×</button>
+            <div id="studentDetails"></div>
+        </div>
+    </div>
+
     <main class="dashboard">
         <div class="mobile-topbar">
             <div class="mobile-brand">
@@ -40,6 +48,15 @@
             </div>
 
             <nav class="side-actions">
+                <div class="profile-box">
+                    <button class="profile-btn" onclick="toggleProfileMenu()">👤 Profile</button>
+
+                    <div class="profile-menu hidden" id="profileMenu">
+                        <p id="profileName">User</p>
+                        <button onclick="openAbout()">About</button>
+                        <button onclick="logout()">Logout</button>
+                    </div>
+                </div>
                 <button class="about-btn" onclick="openAbout()">👨‍💻 About</button>
             </nav>
 
@@ -64,13 +81,13 @@
                 </div>
 
                 <div class="stat-card">
-                    <h3>Courses</h3>
-                    <p>BCA / B.Sc / BBA</p>
+                    <h3>Total Courses</h3>
+                    <p id="totalCourses">0</p>
                 </div>
 
                 <div class="stat-card">
-                    <h3>Status</h3>
-                    <p>Active</p>
+                    <h3>Topper</h3>
+                    <p id="topperName">-</p>
                 </div>
             </section>
 
@@ -104,6 +121,7 @@
             <section class="table-section">
                 <h2>Student Records</h2>
                 <button class="print-btn" onclick="window.print()">Export / Print PDF</button>
+                <button class="csv-btn" onclick="exportCSV()">Export CSV</button>
 
                 <div class="table-wrapper">
                     <table>
@@ -118,6 +136,7 @@
                                 <th>Percentage</th>
                                 <th>Grade</th>
                                 <th>Reg. Date</th>
+                                <th>Badge</th>
                                 <th class="no-print">Action</th>
                             </tr>
                         </thead>

@@ -53,8 +53,14 @@ photoInput.addEventListener("change", () => {
 
 let students = [];
 
+let currentPage = 1;
+const studentsPerPage = 5;
+
 if (userInfo && user) {
     userInfo.innerText = `Welcome, ${user.name}`;
+}
+if (user) {
+    document.getElementById("profileName").innerText = user.name || "User";
 }
 
 studentForm.addEventListener("submit", async (e) => {
@@ -63,10 +69,10 @@ studentForm.addEventListener("submit", async (e) => {
     const studentId = document.getElementById("studentId").value;
 
     const studentData = {
-        name: document.getElementById("name").value,
+        name: capitalizeWords(document.getElementById("name").value),
         rollNo: document.getElementById("rollNo").value,
-        course: document.getElementById("course").value,
-        semester: document.getElementById("semester").value,
+        course: document.getElementById("course").value.toUpperCase(),
+        semester: capitalizeWords(document.getElementById("semester").value),
         email: document.getElementById("email").value,
         phone: document.getElementById("phone").value,
         address: document.getElementById("address").value,
@@ -137,18 +143,22 @@ async function fetchStudents() {
 function renderStudents(data) {
     studentTable.innerHTML = "";
 
-    totalStudents.innerText = data.length;
+    updateStats(data);
 
     if (data.length === 0) {
         studentTable.innerHTML = `
             <tr>
-                <td colspan="7" class="empty">No students found</td>
+                <td colspan="11" class="empty">No students found</td>
             </tr>
         `;
         return;
     }
 
-    data.forEach((student) => {
+    const start = (currentPage - 1) * studentsPerPage;
+    const end = start + studentsPerPage;
+    const paginatedData = data.slice(start, end);
+
+    paginatedData.forEach((student) => {
         const tr = document.createElement("tr");
 
         const present = student.attendance?.present || 0;
@@ -166,9 +176,13 @@ function renderStudents(data) {
         else if (percentage >= 60) grade = "B";
         else if (percentage >= 40) grade = "C";
 
+        let badge = "";
+        if (attendancePercent < 75) badge += `<span class="low-attendance">Low Attendance</span>`;
+        if (isTopper(student, data)) badge += `<span class="topper-badge">🏆 Topper</span>`;
+
         tr.innerHTML = `
-            <td>${student.photo ? `<img src="${student.photo}" class="table-photo">` : "No Photo"}</td>
-            <td>${student.name}</td>
+            <td onclick='openStudentModal(${JSON.stringify(student)})'>${student.photo ? `<img src="${student.photo}" class="table-photo">` : "No Photo"}</td>
+            <td onclick='openStudentModal(${JSON.stringify(student)})'>${student.name}</td>
             <td>${student.rollNo}</td>
             <td>${student.course}</td>
             <td>${student.semester}</td>
@@ -176,6 +190,7 @@ function renderStudents(data) {
             <td>${percentage}%</td>
             <td><span class="grade">${grade}</span></td>
             <td>${new Date(student.createdAt).toLocaleDateString("en-IN")}</td>
+            <td>${badge || "-"}</td>
             <td class="no-print">
                 <button class="edit-btn" onclick='editStudent(${JSON.stringify(student)})'>Edit</button>
                 <button class="delete-btn" onclick="deleteStudent('${student._id}')">Delete</button>
@@ -185,6 +200,8 @@ function renderStudents(data) {
 
         studentTable.appendChild(tr);
     });
+
+    renderPagination(data.length);
 }
 
 function editStudent(student) {
@@ -271,18 +288,6 @@ function printIdCard(student) {
         <head>
             <title>Student ID Card</title>
             <style>
-                @page {
-                    size: A4;
-                    margin: 0;
-                }
-
-                html,
-                body {
-                    width: 210mm;
-                    height: 297mm;
-                    overflow: hidden;
-                }
-                    
                 body {
                     font-family: Arial, sans-serif;
                     background: white;
@@ -352,6 +357,11 @@ function printIdCard(student) {
                     padding: 12px;
                     font-size: 13px;
                     color: #6b7280;
+                }
+
+                @page {
+                    size: A4;
+                    margin: 0;
                 }
             </style>
         </head>
@@ -467,6 +477,114 @@ function showToast(message, type = "success") {
     setTimeout(() => {
         toast.className = "toast hidden";
     }, 2500);
+}
+
+function getPercentage(student) {
+    const s1 = student.marks?.subject1 || 0;
+    const s2 = student.marks?.subject2 || 0;
+    const s3 = student.marks?.subject3 || 0;
+    return ((s1 + s2 + s3) / 300 * 100);
+}
+
+function isTopper(student, list) {
+    const maxPercent = Math.max(...list.map(getPercentage));
+    return getPercentage(student) === maxPercent && maxPercent > 0;
+}
+
+function updateStats(data) {
+    totalStudents.innerText = data.length;
+
+    const courses = new Set(data.map(s => s.course));
+    document.getElementById("totalCourses").innerText = courses.size;
+
+    if (data.length > 0) {
+        const topper = data.reduce((best, current) => {
+            return getPercentage(current) > getPercentage(best) ? current : best;
+        }, data[0]);
+
+        document.getElementById("topperName").innerText =
+            getPercentage(topper) > 0 ? topper.name : "-";
+    }
+}
+
+function openStudentModal(student) {
+    const present = student.attendance?.present || 0;
+    const totalDays = student.attendance?.total || 0;
+    const attendancePercent = totalDays > 0 ? ((present / totalDays) * 100).toFixed(1) : 0;
+
+    document.getElementById("studentDetails").innerHTML = `
+        ${student.photo ? `<img src="${student.photo}" class="modal-photo">` : ""}
+        <h2>${student.name}</h2>
+        <p><b>Roll No:</b> ${student.rollNo}</p>
+        <p><b>Course:</b> ${student.course}</p>
+        <p><b>Semester:</b> ${student.semester}</p>
+        <p><b>Email:</b> ${student.email || "-"}</p>
+        <p><b>Phone:</b> ${student.phone || "-"}</p>
+        <p><b>Address:</b> ${student.address || "-"}</p>
+        <p><b>Attendance:</b> ${present}/${totalDays} (${attendancePercent}%)</p>
+        <p><b>Percentage:</b> ${getPercentage(student).toFixed(1)}%</p>
+    `;
+
+    document.getElementById("studentModal").classList.remove("hidden");
+}
+
+function closeStudentModal() {
+    document.getElementById("studentModal").classList.add("hidden");
+}
+
+function exportCSV() {
+    let csv = "Name,Roll No,Course,Semester,Email,Phone,Attendance,Percentage\n";
+
+    students.forEach(student => {
+        const present = student.attendance?.present || 0;
+        const total = student.attendance?.total || 0;
+
+        csv += `${student.name},${student.rollNo},${student.course},${student.semester},${student.email || "-"},${student.phone || "-"},${present}/${total},${getPercentage(student).toFixed(1)}%\n`;
+    });
+
+    const blob = new Blob([csv], { type: "text/csv" });
+    const link = document.createElement("a");
+
+    link.href = URL.createObjectURL(blob);
+    link.download = "student-records.csv";
+    link.click();
+}
+
+function renderPagination(total) {
+    let oldPagination = document.querySelector(".pagination");
+    if (oldPagination) oldPagination.remove();
+
+    const totalPages = Math.ceil(total / studentsPerPage);
+    if (totalPages <= 1) return;
+
+    const div = document.createElement("div");
+    div.className = "pagination";
+
+    div.innerHTML = `
+        <button onclick="changePage(-1)">Prev</button>
+        <span>Page ${currentPage} of ${totalPages}</span>
+        <button onclick="changePage(1)">Next</button>
+    `;
+
+    document.querySelector(".table-section").appendChild(div);
+}
+
+function changePage(step) {
+    const totalPages = Math.ceil(students.length / studentsPerPage);
+    currentPage += step;
+
+    if (currentPage < 1) currentPage = 1;
+    if (currentPage > totalPages) currentPage = totalPages;
+
+    renderStudents(students);
+}
+
+function toggleProfileMenu() {
+    document.getElementById("profileMenu").classList.toggle("hidden");
+}
+
+function capitalizeWords(text) {
+    return text.trim().replace(/\b\w/g, char => char.toUpperCase());
 }
 
 function logout() {

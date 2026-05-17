@@ -1,6 +1,11 @@
 const API_URL = "https://student-management-system-ktlq.onrender.com";
 
 const token = localStorage.getItem("sms_token");
+
+if (token) {
+    window.location.href = "dashboard.html";
+}
+
 const user = JSON.parse(localStorage.getItem("sms_user"));
 
 if (!token) {
@@ -436,20 +441,6 @@ function updateClock() {
 setInterval(updateClock, 1000);
 updateClock();
 
-function toggleTheme() {
-    document.body.classList.toggle("light-theme");
-
-    if (document.body.classList.contains("light-theme")) {
-        localStorage.setItem("sms_theme", "light");
-    } else {
-        localStorage.setItem("sms_theme", "dark");
-    }
-}
-
-if (localStorage.getItem("sms_theme") === "light") {
-    document.body.classList.add("light-theme");
-}
-
 function openAbout() {
     document.getElementById("aboutModal").classList.remove("hidden");
 }
@@ -460,6 +451,7 @@ function closeAbout() {
 
 function toggleSidebar() {
     document.querySelector(".sidebar").classList.toggle("show-sidebar");
+    document.getElementById("sidebarOverlay").classList.toggle("hidden");
 }
 
 function showToast(message, type = "success") {

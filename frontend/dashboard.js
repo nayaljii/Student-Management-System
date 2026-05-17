@@ -431,6 +431,8 @@ updateClock();
 
 function openAbout() {
     document.getElementById("aboutModal").classList.remove("hidden");
+    document.querySelector(".sidebar").classList.remove("show-sidebar");
+    document.getElementById("sidebarOverlay").classList.add("hidden");
 }
 
 function closeAbout() {
@@ -454,6 +456,10 @@ function showToast(message, type = "success") {
 }
 
 function logout() {
+    const confirmLogout = confirm("Are you sure you want to logout?");
+
+    if (!confirmLogout) return;
+
     localStorage.removeItem("sms_token");
     localStorage.removeItem("sms_user");
     window.location.href = "index.html";

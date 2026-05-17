@@ -21,15 +21,21 @@
 
     <div id="toast" class="toast hidden"></div>
     <main class="dashboard">
-        <div class="menubar">
-            <div>
-                <h2>🎓 Student Info</h2>
-                <p>Student Panel</p>
-            </div>
-            <button class="menu-btn" onclick="toggleSidebar()">☰</button>
-        </div>
+        <button class="menu-btn" onclick="toggleSidebar()">☰</button>
+
         <aside class="sidebar">
-            <button class="about-btn" onclick="openAbout()">👨‍💻 About</button>
+            <div class="brand">
+                <div class="brand-logo">🎓</div>
+                <div>
+                    <h2>Student Info</h2>
+                    <p>Student Panel</p>
+                </div>
+            </div>
+
+            <nav class="side-actions">
+                <button class="about-btn" onclick="openAbout()">👨‍💻 About</button>
+            </nav>
+
             <button onclick="logout()" class="logout-btn">Logout</button>
         </aside>
         

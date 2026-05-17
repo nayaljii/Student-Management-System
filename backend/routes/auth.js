@@ -1,9 +1,3 @@
-const token = localStorage.getItem("sms_token");
-
-if (token) {
-    window.location.href = "dashboard.html";
-}
-
 const express = require("express");
 const jwt = require("jsonwebtoken");
 const { OAuth2Client } = require("google-auth-library");
@@ -48,7 +42,7 @@ router.post("/google", async (req, res) => {
                 email: user.email
             },
             process.env.JWT_SECRET,
-            { expiresIn: "7d" }
+            { expiresIn: "30d" }
         );
 
         res.json({

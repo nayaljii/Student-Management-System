@@ -1,5 +1,11 @@
 const API_URL = "https://student-management-system-ktlq.onrender.com";
 
+const token = localStorage.getItem("sms_token");
+
+if (token) {
+    window.location.href = "dashboard.html";
+}
+
 async function handleGoogleLogin(response) {
     try {
         const res = await fetch(`${API_URL}/api/auth/google`, {

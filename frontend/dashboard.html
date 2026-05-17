@@ -21,18 +21,19 @@
 
     <div id="toast" class="toast hidden"></div>
     <main class="dashboard">
-
-        <aside class="sidebar">
+        <div class="menubar">
             <div>
                 <h2>🎓 Student Info</h2>
                 <p>Student Panel</p>
             </div>
+            <button class="menu-btn" onclick="toggleSidebar()">☰</button>
+        </div>
+        <aside class="sidebar">
             <button class="about-btn" onclick="openAbout()">👨‍💻 About</button>
             <button onclick="logout()" class="logout-btn">Logout</button>
         </aside>
-
+        
         <section class="main-content">
-            <button class="menu-btn" onclick="toggleSidebar()">☰</button>
             <header class="topbar">
                 <div>
                     <p id="liveClock" class="live-clock"></p>

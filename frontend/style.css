@@ -212,7 +212,8 @@ form input::placeholder {
 
 /* Form */
 .show-form-btn,
-.print-btn {
+.print-btn,
+.csv-btn {
     border: none;
     padding: 15px 24px;
     border-radius: 16px;
@@ -283,7 +284,7 @@ form button {
     font-size: 30px;
 }
 
-.print-btn {
+.print-btn, .csv-btn {
     background: linear-gradient(135deg, #22c55e, #14b8a6);
     margin-bottom: 20px;
 }
@@ -474,18 +475,6 @@ tbody tr td:last-child {
     z-index: 998;
 }
 
-.csv-btn {
-    border: none;
-    padding: 15px 24px;
-    border-radius: 16px;
-    background: linear-gradient(135deg, #f59e0b, #f97316);
-    color: white;
-    font-weight: 800;
-    cursor: pointer;
-    margin-left: 10px;
-    margin-bottom: 20px;
-}
-
 .low-attendance,
 .topper-badge {
     display: inline-block;
@@ -617,6 +606,18 @@ tbody tr td:last-child {
     cursor: pointer;
 }
 
+.export-actions {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.export-actions .print-btn,
+.export-actions .csv-btn {
+    margin: 0;
+}
+
 /* Print */
 @media print {
     body * {
@@ -640,6 +641,7 @@ tbody tr td:last-child {
     }
 
     .print-btn,
+    .csv-btn,
     .edit-btn,
     .delete-btn,
     .id-btn,
@@ -729,11 +731,6 @@ tbody tr td:last-child {
         padding: 20px;
     }
 
-    .csv-btn {
-        margin-left: 0;
-        width: 100%;
-    }
-
     .profile-box {
         width: 100%;
     }
@@ -745,6 +742,15 @@ tbody tr td:last-child {
     .profile-menu {
         left: 0;
         right: auto;
+        width: 100%;
+    }
+
+    .export-actions {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .export-actions button {
         width: 100%;
     }
 }

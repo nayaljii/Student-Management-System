@@ -271,13 +271,27 @@ function printIdCard(student) {
         <head>
             <title>Student ID Card</title>
             <style>
+                @page {
+                    size: A4;
+                    margin: 0;
+                }
+
+                html,
+                body {
+                    width: 210mm;
+                    height: 297mm;
+                    overflow: hidden;
+                }
+                    
                 body {
                     font-family: Arial, sans-serif;
-                    background: #e5e7eb;
+                    background: white;
                     display: flex;
                     justify-content: center;
                     align-items: center;
-                    height: 100vh;
+                    width: 210mm;
+                    height: 297mm;
+                    overflow: hidden;
                 }
 
                 .id-card {

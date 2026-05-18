@@ -959,3 +959,14 @@ tbody tr:hover {
         grid-template-columns: repeat(3, minmax(0, 1fr));
     }
 }
+
+button i {
+    font-size: 18px;
+}
+
+button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+}

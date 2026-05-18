@@ -264,9 +264,9 @@ function renderStudents(data) {
             <td><span class="status-badge">${status}</span></td>
             <td>${new Date(student.updatedAt || student.createdAt).toLocaleDateString("en-IN")}</td>
             <td class="no-print">
-                <button class="edit-btn" onclick='editStudent(${JSON.stringify(student)})'>Edit</button>
-                <button class="delete-btn" onclick="deleteStudent('${student._id}')">Delete</button>
-                <button class="id-btn" onclick='printIdCard(${JSON.stringify(student)})'>ID Card</button>
+                <button class="edit-btn" onclick='editStudent(${JSON.stringify(student)})'><i class="ph ph-pencil-simple"></i></button>
+                <button class="delete-btn" onclick="deleteStudent('${student._id}')"><i class="ph ph-trash"></i></button>
+                <button class="id-btn" onclick='printIdCard(${JSON.stringify(student)})'><i class="ph ph-identification-card"></i></button>
             </td>
         `;
 
@@ -706,9 +706,9 @@ function renderPagination(total) {
     div.className = "pagination";
 
     div.innerHTML = `
-        <button onclick="changePage(-1)">Prev</button>
+        <button onclick="changePage(-1)"><i class="ph ph-caret-left"></i></button>
         <span>Page ${currentPage} of ${totalPages}</span>
-        <button onclick="changePage(1)">Next</button>
+        <button onclick="changePage(1)"><i class="ph ph-caret-right"></i></button>
     `;
 
     document.querySelector(".table-section").appendChild(div);

@@ -4,7 +4,7 @@ const token = localStorage.getItem("sms_token");
 const user = JSON.parse(localStorage.getItem("sms_user"));
 
 if (!token) {
-    window.location.href = "index.html";
+    window.location.href = "login.html";
 }
 
 const studentForm = document.getElementById("studentForm");
@@ -612,7 +612,7 @@ function logout() {
 
     localStorage.removeItem("sms_token");
     localStorage.removeItem("sms_user");
-    window.location.href = "index.html";
+    window.location.href = "login.html";
 }
 
 fetchStudents();

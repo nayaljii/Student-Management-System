@@ -2,8 +2,8 @@ const API_URL = "https://student-management-system-ktlq.onrender.com";
 
 const token = localStorage.getItem("sms_token");
 
-if (token && window.location.pathname.includes("index.html")) {
-    window.location.href = "dashboard.html";
+if (token) {
+    window.location.href = "index.html";
 }
 
 async function handleGoogleLogin(response) {
@@ -28,7 +28,7 @@ async function handleGoogleLogin(response) {
         localStorage.setItem("sms_token", data.token);
         localStorage.setItem("sms_user", JSON.stringify(data.user));
 
-        window.location.replace("dashboard.html");
+        window.location.replace("index.html");
 
     } catch (error) {
         console.log(error);

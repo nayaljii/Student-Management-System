@@ -496,16 +496,32 @@ function isTopper(student, list) {
 function updateStats(data) {
     totalStudents.innerText = data.length;
 
-    const courses = new Set(data.map(s => s.course));
-    document.getElementById("totalCourses").innerText = courses.size;
+    const courseCount = {};
+
+    data.forEach(student => {
+        const course = student.course;
+
+        courseCount[course] = (courseCount[course] || 0) + 1;
+    });
+
+    const courseText = Object.entries(courseCount)
+        .map(([course, count]) => `${course} (${count})`)
+        .join(", ");
+
+    document.getElementById("totalCourses").innerText =
+        courseText || "0";
 
     if (data.length > 0) {
         const topper = data.reduce((best, current) => {
-            return getPercentage(current) > getPercentage(best) ? current : best;
+            return getPercentage(current) > getPercentage(best)
+                ? current
+                : best;
         }, data[0]);
 
         document.getElementById("topperName").innerText =
-            getPercentage(topper) > 0 ? topper.name : "-";
+            getPercentage(topper) > 0
+                ? topper.name
+                : "-";
     }
 }
 

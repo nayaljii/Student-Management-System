@@ -175,7 +175,7 @@ function renderStudents(data) {
     if (data.length === 0) {
         studentTable.innerHTML = `
             <tr>
-                <td colspan="12" class="empty">
+                <td colspan="13" class="empty">
                     <div class="empty-card">
                         <h3>No Students Found</h3>
                         <p>Add your first student record to get started.</p>
@@ -509,6 +509,7 @@ function openAbout() {
     document.getElementById("aboutModal").classList.remove("hidden");
     document.querySelector(".sidebar").classList.remove("show-sidebar");
     document.getElementById("sidebarOverlay").classList.add("hidden");
+    document.body.classList.remove("sidebar-open");
 }
 
 function closeAbout() {
@@ -655,6 +656,14 @@ function toggleProfileMenu() {
 
 function capitalizeWords(text) {
     return text.trim().replace(/\b\w/g, char => char.toUpperCase());
+}
+
+function showLoader() {
+    document.getElementById("loader").classList.remove("hidden");
+}
+
+function hideLoader() {
+    document.getElementById("loader").classList.add("hidden");
 }
 
 function logout() {

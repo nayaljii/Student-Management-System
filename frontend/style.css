@@ -885,6 +885,11 @@ tbody tr:hover {
         margin: 0 !important;
     }
 
+    .table-section h2 {
+        font-size: 30px !important;
+        margin-bottom: 18px !important;
+    }
+
     .table-wrapper {
         overflow: visible !important;
     }
@@ -894,6 +899,7 @@ tbody tr:hover {
         min-width: 100% !important;
         border-collapse: collapse !important;
         table-layout: fixed;
+        margin-top: 18px !important;
     }
 
     th,
@@ -904,10 +910,13 @@ tbody tr:hover {
         background: white !important;
         border-bottom: 1px solid #ccc !important;
         word-wrap: break-word;
+        text-align: center !important;
+        vertical-align: middle !important;
     }
 
     th {
         font-weight: bold;
+        background: #f3f4f6 !important;
     }
 
     .table-photo,
@@ -915,6 +924,7 @@ tbody tr:hover {
         width: 38px !important;
         height: 38px !important;
         font-size: 12px !important;
+        border: 2px solid #d1d5db !important;
     }
     
     th:nth-child(12),

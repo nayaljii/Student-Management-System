@@ -11,10 +11,29 @@
     <div class="sidebar-overlay hidden" id="sidebarOverlay" onclick="toggleSidebar()"></div>
     <div class="about-modal hidden" id="aboutModal">
         <div class="about-box">
-            <h2>👨‍💻 About Developer</h2>
-            <p><b>Developed By:</b> Vishal Nayal</p>
-            <p><b>Project:</b> Student Management System</p>
-            <p><b>Features:</b> Google Login, CRUD, Attendance, Marks, ID Card, PDF Export</p>
+            <div class="about-header">
+                <div class="about-logo">
+                    <i class="ph ph-code"></i>
+                </div>
+                <div>
+                    <h2>About Developer</h2>
+                    <p class="about-subtitle">Student Management System</p>
+                </div>
+            </div>
+            <div class="about-content">
+                <div class="about-item">
+                    <i class="ph ph-user"></i>
+                    <span><b>Developer:</b> Vishal Nayal</span>
+                </div>
+                <div class="about-item">
+                    <i class="ph ph-stack"></i>
+                    <span><b>Features:</b> Google Login, CRUD, Attendance, Marks, ID Card, PDF Export</span>
+                </div>
+                <div class="about-item">
+                    <i class="ph ph-clock-clockwise"></i>
+                    <span><b>Version:</b> v2.0 Premium UI</span>
+                </div>
+            </div>
             <button onclick="closeAbout()"><i class="ph ph-x-circle"></i> Close</button>
         </div>
     </div>
@@ -174,7 +193,6 @@
                     <p id="resultCount" class="result-count"></p>
                 </div>
             </section>
-
         </section>
 
         <div id="deleteModal" class="delete-modal hidden">

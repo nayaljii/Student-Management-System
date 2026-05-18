@@ -659,11 +659,13 @@ function capitalizeWords(text) {
 }
 
 function showLoader() {
-    document.getElementById("loader").classList.remove("hidden");
+    document.getElementById("skeletonLoader").classList.remove("hidden");
+    document.querySelector("table").style.display = "none";
 }
 
 function hideLoader() {
-    document.getElementById("loader").classList.add("hidden");
+    document.getElementById("skeletonLoader").classList.add("hidden");
+    document.querySelector("table").style.display = "table";
 }
 
 function logout() {

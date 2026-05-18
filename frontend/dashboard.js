@@ -79,12 +79,12 @@ studentForm.addEventListener("submit", async (e) => {
     const s3 = Number(document.getElementById("subject3").value) || 0;
 
     if (present > total) {
-        showToast("Present days total days se zyada nahi ho sakte", "error");
+        showToast("Present days cannot be greater than total days", "error");
         return;
     }
 
     if (s1 > 100 || s2 > 100 || s3 > 100 || s1 < 0 || s2 < 0 || s3 < 0) {
-        showToast("Marks 0 se 100 ke beech hone chahiye", "error");
+        showToast("Marks must be between 0 and 100", "error");
         return;
     }
 
@@ -93,7 +93,7 @@ studentForm.addEventListener("submit", async (e) => {
     const rollNo = document.getElementById("rollNo").value.trim();
 
     if (phone && !/^[0-9]{10}$/.test(phone)) {
-        showToast("Phone number 10 digit ka hona chahiye", "error");
+        showToast("Phone number must be 10 digits", "error");
         return;
     }
 
@@ -383,12 +383,12 @@ function printIdCard(student) {
             <style>
                 body {
                     font-family: Arial, sans-serif;
-                    background: white;
+                    background: #e5e7eb;
+                    margin: 0;
+                    min-height: 100dvh;
                     display: flex;
                     justify-content: center;
                     align-items: center;
-                    width: 210mm;
-                    height: 297mm;
                     overflow: hidden;
                 }
 
@@ -399,6 +399,8 @@ function printIdCard(student) {
                     background: white;
                     box-shadow: 0 20px 50px rgba(0,0,0,0.25);
                     text-align: center;
+                    margin: auto;
+                    transform: translateY(-10px);
                 }
 
                 .id-header {

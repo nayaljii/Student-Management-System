@@ -176,6 +176,7 @@ async function fetchStudents() {
     showLoader();
 
     try {
+        await new Promise(resolve => setTimeout(resolve, 1000));
         const res = await fetch(`${API_URL}/api/students`, {
             headers: {
                 Authorization: `Bearer ${token}`

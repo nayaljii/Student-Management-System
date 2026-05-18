@@ -56,6 +56,8 @@ let students = [];
 let currentPage = 1;
 const studentsPerPage = 5;
 
+let deleteStudentId = null;
+
 if (userInfo && user) {
     userInfo.innerText = `Welcome, ${user.name}`;
 }
@@ -68,6 +70,23 @@ studentForm.addEventListener("submit", async (e) => {
 
     const studentId = document.getElementById("studentId").value;
 
+    const present = Number(document.getElementById("present").value) || 0;
+    const total = Number(document.getElementById("total").value) || 0;
+
+    const s1 = Number(document.getElementById("subject1").value) || 0;
+    const s2 = Number(document.getElementById("subject2").value) || 0;
+    const s3 = Number(document.getElementById("subject3").value) || 0;
+
+    if (present > total) {
+        showToast("Present days total days se zyada nahi ho sakte", "error");
+        return;
+    }
+
+    if (s1 > 100 || s2 > 100 || s3 > 100 || s1 < 0 || s2 < 0 || s3 < 0) {
+        showToast("Marks 0 se 100 ke beech hone chahiye", "error");
+        return;
+    }
+
     const studentData = {
         name: capitalizeWords(document.getElementById("name").value),
         rollNo: document.getElementById("rollNo").value,
@@ -79,14 +98,14 @@ studentForm.addEventListener("submit", async (e) => {
         photo: photoBase64,
 
         attendance: {
-            present: Number(document.getElementById("present").value) || 0,
-            total: Number(document.getElementById("total").value) || 0
+            present: present,
+            total: total
         },
 
         marks: {
-            subject1: Number(document.getElementById("subject1").value) || 0,
-            subject2: Number(document.getElementById("subject2").value) || 0,
-            subject3: Number(document.getElementById("subject3").value) || 0
+            subject1: s1,
+            subject2: s2,
+            subject3: s3
         }
     };
 
@@ -129,15 +148,23 @@ async function addStudent(studentData) {
 }
 
 async function fetchStudents() {
-    const res = await fetch(`${API_URL}/api/students`, {
-        headers: {
-            Authorization: `Bearer ${token}`
-        }
-    });
+    showLoader();
 
-    students = await res.json();
+    try {
+        const res = await fetch(`${API_URL}/api/students`, {
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
+        });
 
-    renderStudents(students);
+        students = await res.json();
+        renderStudents(students);
+
+    } catch (error) {
+        showToast("Failed to load students", "error");
+    } finally {
+        hideLoader();
+    }
 }
 
 function renderStudents(data) {
@@ -148,9 +175,16 @@ function renderStudents(data) {
     if (data.length === 0) {
         studentTable.innerHTML = `
             <tr>
-                <td colspan="11" class="empty">No students found</td>
+                <td colspan="12" class="empty">
+                    <div class="empty-card">
+                        <h3>No Students Found</h3>
+                        <p>Add your first student record to get started.</p>
+                    </div>
+                </td>
             </tr>
         `;
+
+        document.getElementById("resultCount").innerText = "Showing 0 students";
         return;
     }
 
@@ -175,10 +209,14 @@ function renderStudents(data) {
         if (percentage >= 80) grade = "A";
         else if (percentage >= 60) grade = "B";
         else if (percentage >= 40) grade = "C";
-
+        
         let badge = "";
         if (attendancePercent < 75) badge += `<span class="low-attendance">Low Attendance</span>`;
         if (isTopper(student, data)) badge += `<span class="topper-badge">🏆 Topper</span>`;
+
+        let status = "Pass";
+        if (percentage < 40) status = "Fail";
+        if (attendancePercent < 75) status = "Low Attendance";
 
         tr.innerHTML = `
             <td onclick='openStudentModal(${JSON.stringify(student)})'>${student.photo ? `<img src="${student.photo}" class="table-photo">` : "No Photo"}</td>
@@ -191,6 +229,8 @@ function renderStudents(data) {
             <td><span class="grade">${grade}</span></td>
             <td>${new Date(student.createdAt).toLocaleDateString("en-IN")}</td>
             <td>${badge || "-"}</td>
+            <td><span class="status-badge">${status}</span></td>
+            <td>${new Date(student.updatedAt || student.createdAt).toLocaleDateString("en-IN")}</td>
             <td class="no-print">
                 <button class="edit-btn" onclick='editStudent(${JSON.stringify(student)})'>Edit</button>
                 <button class="delete-btn" onclick="deleteStudent('${student._id}')">Delete</button>
@@ -200,6 +240,9 @@ function renderStudents(data) {
 
         studentTable.appendChild(tr);
     });
+
+    document.getElementById("resultCount").innerText =
+        `Showing ${paginatedData.length} of ${data.length} students`;
 
     renderPagination(data.length);
 }
@@ -262,12 +305,20 @@ async function updateStudent(id, studentData) {
     showToast(data.message || "Done successfully");
 }
 
-async function deleteStudent(id) {
-    const confirmDelete = confirm("Are you sure you want to delete this student?");
+function deleteStudent(id) {
+    deleteStudentId = id;
+    document.getElementById("deleteModal").classList.remove("hidden");
+}
 
-    if (!confirmDelete) return;
+function closeDeleteModal() {
+    deleteStudentId = null;
+    document.getElementById("deleteModal").classList.add("hidden");
+}
 
-    const res = await fetch(`${API_URL}/api/students/${id}`, {
+document.getElementById("confirmDeleteBtn").addEventListener("click", async () => {
+    if (!deleteStudentId) return;
+
+    const res = await fetch(`${API_URL}/api/students/${deleteStudentId}`, {
         method: "DELETE",
         headers: {
             Authorization: `Bearer ${token}`
@@ -275,10 +326,11 @@ async function deleteStudent(id) {
     });
 
     const data = await res.json();
-    showToast(data.message || "Done successfully");
+    showToast(data.message || "Student deleted successfully");
 
+    closeDeleteModal();
     fetchStudents();
-}
+});
 
 function printIdCard(student) {
     const printWindow = window.open("", "_blank");

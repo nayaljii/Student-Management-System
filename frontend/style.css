@@ -853,6 +853,16 @@ tbody tr:hover {
 
 /* Print */
 @media print {
+
+    @page {
+        size: A4 portrait;
+        margin: 12mm;
+    }
+
+    body {
+        background: white !important;
+    }
+
     body * {
         visibility: hidden;
     }
@@ -871,6 +881,40 @@ tbody tr:hover {
         color: black !important;
         box-shadow: none !important;
         border: none !important;
+        padding: 0 !important;
+        margin: 0 !important;
+    }
+
+    .table-wrapper {
+        overflow: visible !important;
+    }
+
+    table {
+        width: 100% !important;
+        min-width: 100% !important;
+        border-collapse: collapse !important;
+        table-layout: fixed;
+    }
+
+    th,
+    td {
+        font-size: 11px !important;
+        padding: 8px 6px !important;
+        color: black !important;
+        background: white !important;
+        border-bottom: 1px solid #ccc !important;
+        word-wrap: break-word;
+    }
+
+    th {
+        font-weight: bold;
+    }
+
+    .table-photo,
+    .initial-avatar {
+        width: 38px !important;
+        height: 38px !important;
+        font-size: 12px !important;
     }
 
     .print-btn,
@@ -878,21 +922,21 @@ tbody tr:hover {
     .edit-btn,
     .delete-btn,
     .id-btn,
-    .no-print {
+    .pagination,
+    .result-count,
+    .no-print,
+    .show-form-btn,
+    .form-section {
         display: none !important;
     }
 
-    table {
-        width: 100%;
-        min-width: 100%;
-        border-collapse: collapse;
-    }
-
-    th,
-    td {
+    .grade,
+    .status-badge,
+    .topper-badge,
+    .low-attendance {
+        background: none !important;
         color: black !important;
-        background: white !important;
-        border-bottom: 1px solid #ccc !important;
+        padding: 0 !important;
     }
 }
 

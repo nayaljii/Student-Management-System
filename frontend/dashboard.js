@@ -176,7 +176,6 @@ async function fetchStudents() {
     showLoader();
 
     try {
-        await new Promise(resolve => setTimeout(resolve, 1000));
         const res = await fetch(`${API_URL}/api/students`, {
             headers: {
                 Authorization: `Bearer ${token}`
@@ -734,11 +733,27 @@ function capitalizeWords(text) {
 function showLoader() {
     document.getElementById("skeletonLoader").classList.remove("hidden");
     document.querySelector("table").style.display = "none";
+
+    document.querySelectorAll(".stat-skeleton").forEach(el => {
+        el.classList.remove("hidden");
+    });
+
+    document.querySelectorAll(".stat-content").forEach(el => {
+        el.style.display = "none";
+    });
 }
 
 function hideLoader() {
     document.getElementById("skeletonLoader").classList.add("hidden");
     document.querySelector("table").style.display = "table";
+
+    document.querySelectorAll(".stat-skeleton").forEach(el => {
+        el.classList.add("hidden");
+    });
+
+    document.querySelectorAll(".stat-content").forEach(el => {
+        el.style.display = "block";
+    });
 }
 
 function logout() {

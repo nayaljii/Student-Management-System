@@ -739,6 +739,56 @@ tbody tr td:last-child {
     font-weight: bold;
 }
 
+.search-box {
+    position: relative;
+    width: 260px;
+}
+
+.search-box input {
+    width: 100%;
+    padding-right: 45px;
+}
+
+.clear-search-btn {
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 28px;
+    height: 28px;
+    border: none;
+    border-radius: 50%;
+    background: #ef4444;
+    color: white;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+.reset-btn {
+    background: #334155 !important;
+}
+
+.initial-avatar {
+    width: 54px;
+    height: 54px;
+    border-radius: 50%;
+    display: grid;
+    place-items: center;
+    background: linear-gradient(135deg, #2563eb, #7c3aed);
+    color: white;
+    font-weight: 800;
+    border: 3px solid rgba(147,197,253,0.5);
+}
+
+tbody tr {
+    transition: 0.2s ease;
+}
+
+tbody tr:hover {
+    transform: translateY(-2px);
+    filter: brightness(1.15);
+}
+
 /* Print */
 @media print {
     body * {
@@ -878,6 +928,10 @@ tbody tr td:last-child {
     }
 
     .export-actions button {
+        width: 100%;
+    }
+
+    .search-box {
         width: 100%;
     }
 }

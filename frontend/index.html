@@ -69,7 +69,10 @@
                     <p id="userInfo">Welcome back</p>
                 </div>
 
-                <input type="text" id="searchInput" placeholder="Search by name, course, semester..." oninput="searchStudents()"> 
+                <div class="search-box">
+                    <input type="text" id="searchInput" placeholder="Search by name, course, semester..." oninput="searchStudents()">
+                    <button class="clear-search-btn hidden" onclick="clearSearch()">×</button>
+                </div>
             </header>
 
             <section class="stats">
@@ -111,7 +114,8 @@
                     <input type="number" id="subject2" placeholder="Subject 2 Marks">
                     <input type="number" id="subject3" placeholder="Subject 3 Marks">
 
-                    <button type="submit" id="submitBtn">Add Student</button>
+                    <button type="submit" id="submitBtn">Add</button>
+                    <button type="button" class="reset-btn" onclick="resetStudentForm()">Reset</button>
                     <button type="button" class="cancel-btn" onclick="cancelForm()">Cancel</button>
                 </form>
             </section>

@@ -52,6 +52,7 @@ photoInput.addEventListener("change", () => {
 });
 
 let students = [];
+let currentFilteredStudents = [];
 
 let currentPage = 1;
 const studentsPerPage = 5;
@@ -87,13 +88,37 @@ studentForm.addEventListener("submit", async (e) => {
         return;
     }
 
+    const email = document.getElementById("email").value.trim();
+    const phone = document.getElementById("phone").value.trim();
+    const rollNo = document.getElementById("rollNo").value.trim();
+
+    if (phone && !/^[0-9]{10}$/.test(phone)) {
+        showToast("Phone number 10 digit ka hona chahiye", "error");
+        return;
+    }
+
+    if (email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+        showToast("Please enter a valid email", "error");
+        return;
+    }
+
+    const duplicateRoll = students.find(student =>
+        student.rollNo.toLowerCase() === rollNo.toLowerCase() &&
+        student._id !== document.getElementById("studentId").value
+    );
+
+    if (duplicateRoll) {
+        showToast("Roll number already exists", "error");
+        return;
+    }
+
     const studentData = {
         name: capitalizeWords(document.getElementById("name").value),
-        rollNo: document.getElementById("rollNo").value,
+        rollNo: rollNo,
         course: document.getElementById("course").value.toUpperCase(),
         semester: capitalizeWords(document.getElementById("semester").value),
-        email: document.getElementById("email").value,
-        phone: document.getElementById("phone").value,
+        email: email,
+        phone: phone,
         address: document.getElementById("address").value,
         photo: photoBase64,
 
@@ -158,6 +183,7 @@ async function fetchStudents() {
         });
 
         students = await res.json();
+        currentFilteredStudents = students;
         renderStudents(students);
 
     } catch (error) {
@@ -219,7 +245,13 @@ function renderStudents(data) {
         if (attendancePercent < 75) status = "Low Attendance";
 
         tr.innerHTML = `
-            <td onclick='openStudentModal(${JSON.stringify(student)})'>${student.photo ? `<img src="${student.photo}" class="table-photo">` : "No Photo"}</td>
+            <td onclick='openStudentModal(${JSON.stringify(student)})'>
+                ${
+                    student.photo
+                        ? `<img src="${student.photo}" class="table-photo">`
+                        : `<div class="initial-avatar">${getInitials(student.name)}</div>`
+                }
+            </td>
             <td onclick='openStudentModal(${JSON.stringify(student)})'>${student.name}</td>
             <td>${student.rollNo}</td>
             <td>${student.course}</td>
@@ -331,6 +363,15 @@ document.getElementById("confirmDeleteBtn").addEventListener("click", async () =
     closeDeleteModal();
     fetchStudents();
 });
+
+function getInitials(name) {
+    return name
+        .split(" ")
+        .map(word => word[0])
+        .join("")
+        .substring(0, 2)
+        .toUpperCase();
+}
 
 function printIdCard(student) {
     const printWindow = window.open("", "_blank");
@@ -458,10 +499,24 @@ function searchStudents() {
     applyFilters();
 }
 
+function clearSearch() {
+    searchInput.value = "";
+    document.querySelector(".clear-search-btn").classList.add("hidden");
+    currentFilteredStudents = students;
+    currentPage = 1;
+    renderStudents(currentFilteredStudents);
+}
+
 function applyFilters() {
     const searchValue = searchInput.value.toLowerCase();
 
-    const filtered = students.filter((student) => {
+    if (searchValue) {
+        document.querySelector(".clear-search-btn").classList.remove("hidden");
+    } else {
+        document.querySelector(".clear-search-btn").classList.add("hidden");
+    }
+
+    currentFilteredStudents = students.filter((student) => {
         return (
             student.name.toLowerCase().includes(searchValue) ||
             student.rollNo.toLowerCase().includes(searchValue) ||
@@ -470,13 +525,28 @@ function applyFilters() {
         );
     });
 
-    renderStudents(filtered);
+    currentPage = 1;
+    renderStudents(currentFilteredStudents);
 }
 
 function showStudentForm() {
     formSection.classList.remove("hidden");
     document.getElementById("formTitle").innerText = "Add Student";
     document.getElementById("submitBtn").innerText = "Add Student";
+}
+
+function resetStudentForm() {
+    const studentId = document.getElementById("studentId").value;
+
+    studentForm.reset();
+
+    if (studentId) {
+        document.getElementById("studentId").value = studentId;
+    }
+
+    photoBase64 = "";
+    photoPreview.src = "";
+    photoPreview.style.display = "none";
 }
 
 function cancelForm() {
@@ -604,9 +674,11 @@ function closeStudentModal() {
 }
 
 function exportCSV() {
+    const exportData = currentFilteredStudents.length ? currentFilteredStudents : students;
+
     let csv = "Name,Roll No,Course,Semester,Email,Phone,Attendance,Percentage\n";
 
-    students.forEach(student => {
+    exportData.forEach(student => {
         const present = student.attendance?.present || 0;
         const total = student.attendance?.total || 0;
 

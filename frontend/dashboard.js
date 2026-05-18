@@ -731,8 +731,11 @@ function capitalizeWords(text) {
 }
 
 function showLoader() {
-    document.getElementById("skeletonLoader").classList.remove("hidden");
-    document.querySelector("table").style.display = "none";
+    const skeleton = document.getElementById("skeletonLoader");
+    const table = document.querySelector("table");
+
+    skeleton.classList.remove("hidden");
+    table.style.display = "none";
 
     document.querySelectorAll(".stat-skeleton").forEach(el => {
         el.classList.remove("hidden");
@@ -744,8 +747,11 @@ function showLoader() {
 }
 
 function hideLoader() {
-    document.getElementById("skeletonLoader").classList.add("hidden");
-    document.querySelector("table").style.display = "table";
+    const skeleton = document.getElementById("skeletonLoader");
+    const table = document.querySelector("table");
+
+    skeleton.classList.add("hidden");
+    table.style.display = "table";
 
     document.querySelectorAll(".stat-skeleton").forEach(el => {
         el.classList.add("hidden");

@@ -844,32 +844,13 @@ async function saveBulkAttendance() {
     try {
         showToast("Updating attendance...");
 
+        const month = new Date().toLocaleString("en-IN", {
+            month: "long",
+            year: "numeric"
+        });
+
         const updatePromises = students.map((student) => {
             const isPresent = checkedIds.includes(student._id);
-
-            const updatedStudent = {
-                name: student.name,
-                rollNo: student.rollNo,
-                course: student.course,
-                semester: student.semester,
-                email: student.email,
-                phone: student.phone,
-                address: student.address,
-                photo: student.photo,
-                marks: student.marks,
-
-                attendance: {
-                    present: (student.attendance?.present || 0) + (isPresent ? 1 : 0),
-                    total: (student.attendance?.total || 0) + 1
-                },
-
-                attendanceHistory: updatedHistory
-            };
-
-            const month = new Date().toLocaleString("en-IN", {
-                month: "long",
-                year: "numeric"
-            });
 
             const oldHistory = student.attendanceHistory || [];
 
@@ -899,6 +880,25 @@ async function saveBulkAttendance() {
                 ];
             }
 
+            const updatedStudent = {
+                name: student.name,
+                rollNo: student.rollNo,
+                course: student.course,
+                semester: student.semester,
+                email: student.email,
+                phone: student.phone,
+                address: student.address,
+                photo: student.photo,
+                marks: student.marks,
+
+                attendance: {
+                    present: (student.attendance?.present || 0) + (isPresent ? 1 : 0),
+                    total: (student.attendance?.total || 0) + 1
+                },
+
+                attendanceHistory: updatedHistory
+            };
+
             return fetch(`${API_URL}/api/students/${student._id}`, {
                 method: "PUT",
                 headers: {
@@ -912,11 +912,11 @@ async function saveBulkAttendance() {
         await Promise.all(updatePromises);
 
         showToast("Attendance updated successfully");
-
         closeBulkAttendanceModal();
         fetchStudents();
 
     } catch (error) {
+        console.log("Attendance update error:", error);
         showToast("Failed to update attendance", "error");
     }
 }

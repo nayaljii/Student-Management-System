@@ -18,8 +18,14 @@ const studentSchema = new mongoose.Schema({
     attendanceHistory: [
         {
             month: String,
-            present: Number,
-            total: Number
+            present: {
+                type: Number,
+                default: 0
+            },
+            total: {
+                type: Number,
+                default: 0
+            }
         }
     ],
 

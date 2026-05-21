@@ -848,11 +848,21 @@ async function saveBulkAttendance() {
             const isPresent = checkedIds.includes(student._id);
 
             const updatedStudent = {
-                ...student,
+                name: student.name,
+                rollNo: student.rollNo,
+                course: student.course,
+                semester: student.semester,
+                email: student.email,
+                phone: student.phone,
+                address: student.address,
+                photo: student.photo,
+                marks: student.marks,
+
                 attendance: {
                     present: (student.attendance?.present || 0) + (isPresent ? 1 : 0),
                     total: (student.attendance?.total || 0) + 1
                 },
+
                 attendanceHistory: updatedHistory
             };
 

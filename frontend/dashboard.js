@@ -849,6 +849,17 @@ async function saveBulkAttendance() {
             year: "numeric"
         });
 
+        const today = new Date().toLocaleDateString("en-IN");
+
+        const alreadyMarked = students.some(student =>
+            student.attendanceHistory?.some(item => item.date === today)
+        );
+
+        if (alreadyMarked) {
+            showToast("Attendance has already been marked for today", "error");
+            return;
+        }
+
         const updatePromises = students.map((student) => {
             const isPresent = checkedIds.includes(student._id);
 
@@ -873,6 +884,7 @@ async function saveBulkAttendance() {
                 updatedHistory = [
                     ...oldHistory,
                     {
+                        date: today,
                         month,
                         present: isPresent ? 1 : 0,
                         total: 1

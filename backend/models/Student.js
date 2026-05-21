@@ -17,6 +17,7 @@ const studentSchema = new mongoose.Schema({
 
     attendanceHistory: [
         {
+            date: String,
             month: String,
             present: {
                 type: Number,

@@ -30,6 +30,8 @@ const studentSchema = new mongoose.Schema({
         }
     ],
 
+    lastAttendanceDate: String,
+
     marks: {
         subject1: { type: Number, default: 0 },
         subject2: { type: Number, default: 0 },

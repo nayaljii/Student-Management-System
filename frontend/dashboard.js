@@ -664,7 +664,12 @@ function openStudentModal(student) {
         <p><b>Email:</b> ${student.email || "-"}</p>
         <p><b>Phone:</b> ${student.phone || "-"}</p>
         <p><b>Address:</b> ${student.address || "-"}</p>
-        <p><b>Attendance:</b> ${present}/${totalDays} (${attendancePercent}%)</p>
+        <p>
+            <b>Attendance:</b>
+            <span class="attendance-link" onclick='showMonthAttendance(${JSON.stringify(student)})'>
+                ${present}/${totalDays} (${attendancePercent}%)
+            </span>
+        </p>
         <p><b>Percentage:</b> ${getPercentage(student).toFixed(1)}%</p>
     `;
 
@@ -762,6 +767,142 @@ function hideLoader() {
     document.querySelectorAll(".stat-content").forEach(el => {
         el.style.display = "block";
     });
+}
+
+function openBulkAttendanceModal() {
+    const list = document.getElementById("attendanceStudentList");
+
+    list.innerHTML = "";
+
+    if (students.length === 0) {
+        list.innerHTML = "<p>No students found</p>";
+    }
+
+    students.forEach((student) => {
+        const div = document.createElement("div");
+        div.className = "attendance-student-item";
+
+        div.innerHTML = `
+            <label>
+                <input type="checkbox" class="attendance-check" value="${student._id}">
+                <span>${student.name} - ${student.rollNo}</span>
+            </label>
+        `;
+
+        list.appendChild(div);
+    });
+
+    document.getElementById("bulkAttendanceModal").classList.remove("hidden");
+}
+
+function closeBulkAttendanceModal() {
+    document.getElementById("bulkAttendanceModal").classList.add("hidden");
+}
+
+async function saveBulkAttendance() {
+    const checkedIds = Array.from(
+        document.querySelectorAll(".attendance-check:checked")
+    ).map(input => input.value);
+
+    if (students.length === 0) return;
+
+    try {
+        showToast("Updating attendance...");
+
+        const updatePromises = students.map((student) => {
+            const isPresent = checkedIds.includes(student._id);
+
+            const updatedStudent = {
+                ...student,
+                attendance: {
+                    present: (student.attendance?.present || 0) + (isPresent ? 1 : 0),
+                    total: (student.attendance?.total || 0) + 1
+                },
+                attendanceHistory: updatedHistory
+            };
+
+            const month = new Date().toLocaleString("en-IN", {
+                month: "long",
+                year: "numeric"
+            });
+
+            const oldHistory = student.attendanceHistory || [];
+
+            const existingMonth = oldHistory.find(item => item.month === month);
+
+            let updatedHistory;
+
+            if (existingMonth) {
+                updatedHistory = oldHistory.map(item => {
+                    if (item.month === month) {
+                        return {
+                            ...item,
+                            present: item.present + (isPresent ? 1 : 0),
+                            total: item.total + 1
+                        };
+                    }
+                    return item;
+                });
+            } else {
+                updatedHistory = [
+                    ...oldHistory,
+                    {
+                        month,
+                        present: isPresent ? 1 : 0,
+                        total: 1
+                    }
+                ];
+            }
+
+            return fetch(`${API_URL}/api/students/${student._id}`, {
+                method: "PUT",
+                headers: {
+                    "Content-Type": "application/json",
+                    Authorization: `Bearer ${token}`
+                },
+                body: JSON.stringify(updatedStudent)
+            });
+        });
+
+        await Promise.all(updatePromises);
+
+        showToast("Attendance updated successfully");
+
+        closeBulkAttendanceModal();
+        fetchStudents();
+
+    } catch (error) {
+        showToast("Failed to update attendance", "error");
+    }
+}
+
+function showMonthAttendance(student) {
+    const history = student.attendanceHistory || [];
+
+    let html = `
+        ${student.photo ? `<img src="${student.photo}" class="modal-photo">` : ""}
+        <h2>${student.name}</h2>
+        <h3>Month-wise Attendance</h3>
+    `;
+
+    if (history.length === 0) {
+        html += `<p>No monthly attendance record found.</p>`;
+    } else {
+        history.forEach(item => {
+            const percent = item.total > 0
+                ? ((item.present / item.total) * 100).toFixed(1)
+                : 0;
+
+            html += `
+                <div class="month-attendance-card">
+                    <b>${item.month}</b>
+                    <span>${item.present}/${item.total} (${percent}%)</span>
+                </div>
+            `;
+        });
+    }
+
+    document.getElementById("studentDetails").innerHTML = html;
 }
 
 function logout() {

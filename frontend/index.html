@@ -8,45 +8,6 @@
     <title>Student Management System</title>
 </head>
 <body>
-    <div class="sidebar-overlay hidden" id="sidebarOverlay" onclick="toggleSidebar()"></div>
-    <div class="about-modal hidden" id="aboutModal">
-        <div class="about-box">
-            <div class="about-header">
-                <div class="about-logo">
-                    <i class="ph ph-code"></i>
-                </div>
-                <div>
-                    <h2>About Developer</h2>
-                    <p class="about-subtitle">Student Management System</p>
-                </div>
-            </div>
-            <div class="about-content">
-                <div class="about-item">
-                    <i class="ph ph-user"></i>
-                    <span><b>Developer:</b> Vishal Nayal</span>
-                </div>
-                <div class="about-item">
-                    <i class="ph ph-stack"></i>
-                    <span><b>Features:</b> Google Login, CRUD, Attendance, Marks, ID Card, PDF Export</span>
-                </div>
-                <div class="about-item">
-                    <i class="ph ph-clock-clockwise"></i>
-                    <span><b>Version:</b> v2.0 Premium UI</span>
-                </div>
-            </div>
-            <button onclick="closeAbout()"><i class="ph ph-x-circle"></i> Close</button>
-        </div>
-    </div>
-
-    <div id="toast" class="toast hidden"></div>
-
-    <div class="student-modal hidden" id="studentModal">
-        <div class="student-box">
-            <button class="close-modal" onclick="closeStudentModal()"><i class="ph ph-x-circle"></i></button>
-            <div id="studentDetails"></div>
-        </div>
-    </div>
-
     <main class="dashboard">
         <div class="mobile-topbar">
             <div class="mobile-brand">
@@ -154,6 +115,9 @@
                 </form>
             </section>
 
+            <button class="attendance-main-btn" onclick="openBulkAttendanceModal()">
+                <i class="ph ph-calendar-check"></i> Attendance</button>
+
             <section class="table-section">
                 <h2>Student Records</h2>
                 <div class="export-actions">
@@ -195,6 +159,45 @@
             </section>
         </section>
 
+        <div class="sidebar-overlay hidden" id="sidebarOverlay" onclick="toggleSidebar()"></div>
+        <div class="about-modal hidden" id="aboutModal">
+            <div class="about-box">
+                <div class="about-header">
+                    <div class="about-logo">
+                        <i class="ph ph-code"></i>
+                    </div>
+                    <div>
+                        <h2>About Developer</h2>
+                        <p class="about-subtitle">Student Management System</p>
+                    </div>
+                </div>
+                <div class="about-content">
+                    <div class="about-item">
+                        <i class="ph ph-user"></i>
+                        <span><b>Developer:</b> Vishal Nayal, Sumit Pandey, Taran Gariya</span>
+                    </div>
+                    <div class="about-item">
+                        <i class="ph ph-stack"></i>
+                        <span><b>Features:</b> Google Login, CRUD, Attendance, Marks, ID Card, PDF Export</span>
+                    </div>
+                    <div class="about-item">
+                        <i class="ph ph-clock-clockwise"></i>
+                        <span><b>Version:</b> v2.0 Premium UI</span>
+                    </div>
+                </div>
+                <button onclick="closeAbout()"><i class="ph ph-x-circle"></i> Close</button>
+            </div>
+        </div>
+
+        <div id="toast" class="toast hidden"></div>
+
+        <div class="student-modal hidden" id="studentModal">
+            <div class="student-box">
+                <button class="close-modal" onclick="closeStudentModal()"><i class="ph ph-x-circle"></i></button>
+                <div id="studentDetails"></div>
+            </div>
+        </div>
+
         <div id="deleteModal" class="delete-modal hidden">
             <div class="delete-box">
                 <h2>Delete Student?</h2>
@@ -202,6 +205,33 @@
                 <div>
                     <button id="confirmDeleteBtn"><i class="ph ph-trash"> YES</i></button>
                     <button onclick="closeDeleteModal()"><i class="ph ph-x"> NO</i></button>
+                </div>
+            </div>
+        </div>
+
+        <div class="bulk-attendance-modal hidden" id="bulkAttendanceModal">
+            <div class="bulk-attendance-box">
+                <h2>
+                    <i class="ph ph-calendar-check"></i>
+                    Mark Attendance
+                </h2>
+
+                <p class="attendance-note">
+                    Tick present students. Unticked students will be marked absent.
+                </p>
+
+                <div id="attendanceStudentList" class="attendance-student-list"></div>
+
+                <div class="attendance-actions">
+                    <button onclick="saveBulkAttendance()">
+                        <i class="ph ph-check-circle"></i>
+                        Save Attendance
+                    </button>
+
+                    <button onclick="closeBulkAttendanceModal()">
+                        <i class="ph ph-x-circle"></i>
+                        Cancel
+                    </button>
                 </div>
             </div>
         </div>

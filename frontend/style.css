@@ -594,6 +594,10 @@ tbody tr td:last-child {
     margin: 0 auto 15px;
 }
 
+.modal-avatar {
+    margin: 0 auto 18px;
+}
+
 .student-box h2 {
     text-align: center;
     margin-bottom: 15px;

@@ -245,14 +245,14 @@ function renderStudents(data) {
         if (attendancePercent < 75) status = "Low Attendance";
 
         tr.innerHTML = `
-            <td onclick='openStudentModal(${JSON.stringify(student)})'>
+            <td onclick="openStudentModal('${student._id}')">
                 ${
                     student.photo
                         ? `<img src="${student.photo}" class="table-photo">`
                         : `<div class="initial-avatar">${getInitials(student.name)}</div>`
                 }
             </td>
-            <td onclick='openStudentModal(${JSON.stringify(student)})'>${student.name}</td>
+            <td onclick="openStudentModal('${student._id}')">${student.name}</td>
             <td>${student.rollNo}</td>
             <td>${student.course}</td>
             <td>${student.semester}</td>
@@ -650,30 +650,65 @@ function updateStats(data) {
     }
 }
 
-function openStudentModal(student) {
+function openStudentModal(studentId) {
+
+    const student = students.find(s => s._id === studentId);
+
+    if (!student) return;
+
     const present = student.attendance?.present || 0;
     const totalDays = student.attendance?.total || 0;
-    const attendancePercent = totalDays > 0 ? ((present / totalDays) * 100).toFixed(1) : 0;
+
+    const attendancePercent =
+        totalDays > 0
+            ? ((present / totalDays) * 100).toFixed(1)
+            : 0;
 
     document.getElementById("studentDetails").innerHTML = `
-        ${student.photo ? `<img src="${student.photo}" class="modal-photo">` : ""}
+        ${student.photo
+            ? `<img src="${student.photo}" class="modal-photo">`
+            : `<div class="initial-avatar modal-avatar">
+                ${getInitials(student.name)}
+              </div>`
+        }
+
         <h2>${student.name}</h2>
+
         <p><b>Roll No:</b> ${student.rollNo}</p>
+
         <p><b>Course:</b> ${student.course}</p>
+
         <p><b>Semester:</b> ${student.semester}</p>
+
         <p><b>Email:</b> ${student.email || "-"}</p>
+
         <p><b>Phone:</b> ${student.phone || "-"}</p>
+
         <p><b>Address:</b> ${student.address || "-"}</p>
+
         <p>
             <b>Attendance:</b>
-            <span class="attendance-link" onclick='showMonthAttendance(${JSON.stringify(student)})'>
-                ${present}/${totalDays} (${attendancePercent}%)
+
+            <span
+            class="attendance-link"
+            onclick="showMonthAttendance('${student._id}')">
+
+                ${present}/${totalDays}
+                (${attendancePercent}%)
+
             </span>
         </p>
-        <p><b>Percentage:</b> ${getPercentage(student).toFixed(1)}%</p>
+
+        <p>
+            <b>Percentage:</b>
+            ${getPercentage(student).toFixed(1)}%
+        </p>
     `;
 
-    document.getElementById("studentModal").classList.remove("hidden");
+    document
+        .getElementById("studentModal")
+        .classList
+        .remove("hidden");
 }
 
 function closeStudentModal() {
@@ -876,27 +911,56 @@ async function saveBulkAttendance() {
     }
 }
 
-function showMonthAttendance(student) {
-    const history = student.attendanceHistory || [];
+function showMonthAttendance(studentId) {
+
+    const student =
+        students.find(s => s._id === studentId);
+
+    if (!student) return;
+
+    const history =
+        student.attendanceHistory || [];
 
     let html = `
-        ${student.photo ? `<img src="${student.photo}" class="modal-photo">` : ""}
+        ${student.photo
+            ? `<img src="${student.photo}" class="modal-photo">`
+            : `<div class="initial-avatar modal-avatar">
+                ${getInitials(student.name)}
+              </div>`
+        }
+
         <h2>${student.name}</h2>
+
         <h3>Month-wise Attendance</h3>
     `;
 
     if (history.length === 0) {
-        html += `<p>No monthly attendance record found.</p>`;
+
+        html += `
+            <p>
+                No monthly attendance record found.
+            </p>
+        `;
+
     } else {
+
         history.forEach(item => {
-            const percent = item.total > 0
-                ? ((item.present / item.total) * 100).toFixed(1)
-                : 0;
+
+            const percent =
+                item.total > 0
+                    ? ((item.present / item.total) * 100).toFixed(1)
+                    : 0;
 
             html += `
                 <div class="month-attendance-card">
+
                     <b>${item.month}</b>
-                    <span>${item.present}/${item.total} (${percent}%)</span>
+
+                    <span>
+                        ${item.present}/${item.total}
+                        (${percent}%)
+                    </span>
+
                 </div>
             `;
         });

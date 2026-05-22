@@ -7,6 +7,10 @@ if (!token) {
     window.location.href = "login.html";
 }
 
+if (user?.role === "admin") {
+    document.getElementById("adminBtn").classList.remove("hidden");
+}
+
 const studentForm = document.getElementById("studentForm");
 const studentTable = document.getElementById("studentTable");
 const totalStudents = document.getElementById("totalStudents");
@@ -152,6 +156,56 @@ studentForm.addEventListener("submit", async (e) => {
     cancelForm();
     fetchStudents();
 });
+
+async function openAdminPanel() {
+    document.getElementById("adminModal").classList.remove("hidden");
+
+    const res = await fetch(`${API_URL}/api/admin/users`, {
+        headers: {
+            Authorization: `Bearer ${token}`
+        }
+    });
+
+    const users = await res.json();
+
+    document.getElementById("adminUsersList").innerHTML = users.map(user => `
+        <div class="admin-user-card">
+            <div>
+                <b>${user.name}</b>
+                <p>${user.email}</p>
+            </div>
+
+            <button onclick="loadUserStudents('${user._id}', '${user.name}')">
+                View Students
+            </button>
+        </div>
+    `).join("");
+}
+
+function closeAdminPanel() {
+    document.getElementById("adminModal").classList.add("hidden");
+}
+
+async function loadUserStudents(userId, userName) {
+    const res = await fetch(`${API_URL}/api/admin/students/${userId}`, {
+        headers: {
+            Authorization: `Bearer ${token}`
+        }
+    });
+
+    const list = await res.json();
+
+    document.getElementById("adminStudentList").innerHTML = `
+        <h3>${userName}'s Students (${list.length})</h3>
+
+        ${list.map(student => `
+            <div class="admin-student-card">
+                <b>${student.name}</b>
+                <span>${student.rollNo} | ${student.course}</span>
+            </div>
+        `).join("")}
+    `;
+}
 
 async function addStudent(studentData) {
     const res = await fetch(`${API_URL}/api/students`, {

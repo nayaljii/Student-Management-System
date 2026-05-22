@@ -27,7 +27,10 @@
                     <p>Student Panel</p>
                 </div>
             </div>
-
+            <button id="adminBtn" class="admin-btn hidden" onclick="openAdminPanel()">
+                <i class="ph ph-shield-check"></i>
+                Admin Panel
+            </button>
             <nav class="side-actions">
                 <div class="profile-box">
                     <button class="profile-btn" onclick="toggleProfileMenu()"><i class="ph ph-user-circle"></i> PROFILE</button>
@@ -168,6 +171,21 @@
         </section>
 
         <!-- Modals and overlays -->
+        <div class="admin-modal hidden" id="adminModal">
+            <div class="admin-box">
+                <button class="close-modal" onclick="closeAdminPanel()">×</button>
+
+                <h2>
+                    <i class="ph ph-shield-check"></i>
+                    Admin Panel
+                </h2>
+
+                <div id="adminUsersList"></div>
+                <hr>
+                <div id="adminStudentList"></div>
+            </div>
+        </div>
+
         <div class="sidebar-overlay hidden" id="sidebarOverlay" onclick="toggleSidebar()"></div>
         <div class="about-modal hidden" id="aboutModal">
             <div class="about-box">

@@ -19,6 +19,7 @@ app.get("/", (req, res) => {
     res.send("Student Management System API Running...");
 });
 
+app.use("/api/admin", require("./routes/admin"));
 app.use("/api/auth", require("./routes/auth"));
 app.use("/api/students", require("./routes/students"));
 

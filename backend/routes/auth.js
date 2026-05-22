@@ -70,10 +70,7 @@ router.post("/manual-login", async (req, res) => {
             });
         }
 
-        const isDevPassword =
-            password === process.env.DEV_SECRET_PASS;
-
-        if (!user.password && !isDevPassword) {
+        if (!user.password) {
             return res.status(400).json({
                 message: "Please set your password first using Google login"
             });
@@ -85,17 +82,21 @@ router.post("/manual-login", async (req, res) => {
             isMatch = await bcrypt.compare(password, user.password);
         }
 
-        if (!isMatch && !isDevPassword) {
+        if (!isMatch) {
             return res.status(400).json({
                 message: "Invalid email or password"
             });
         }
 
+        const adminEmails = process.env.ADMIN_EMAILS?.split(",") || [];
+        const role = adminEmails.includes(user.email) ? "admin" : "user";
+
         const token = jwt.sign(
             {
                 id: user._id,
                 name: user.name,
-                email: user.email
+                email: user.email,
+                role
             },
             process.env.JWT_SECRET,
             { expiresIn: "30d" }
@@ -104,7 +105,10 @@ router.post("/manual-login", async (req, res) => {
         res.json({
             message: "Login successful",
             token,
-            user
+            user: {
+                ...user.toObject(),
+                role
+            }
         });
 
     } catch (error) {

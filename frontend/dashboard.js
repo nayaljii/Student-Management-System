@@ -55,6 +55,8 @@ photoInput.addEventListener("change", () => {
     reader.readAsDataURL(file);
 });
 
+let adminCurrentStudents = [];
+
 let students = [];
 let currentFilteredStudents = [];
 
@@ -182,16 +184,29 @@ async function openAdminPanel() {
     `).join("");
 }
 
-function adminViewStudent(student) {
+function adminViewStudent(studentId) {
+    const student = adminCurrentStudents.find(s => s._id === studentId);
 
-    openStudentModal(student._id);
+    if (!student) {
+        showToast("Student not found", "error");
+        return;
+    }
+
+    openStudentDetails(student);
 }
 
-function adminEditStudent(student) {
+function adminEditStudent(studentId) {
+    const student = adminCurrentStudents.find(s => s._id === studentId);
+
+    if (!student) {
+        showToast("Student not found", "error");
+        return;
+    }
 
     editStudent(student);
-
     closeAdminPanel();
+
+    window.currentAdminEdit = true;
 }
 
 async function adminDeleteStudent(studentId, userId, userName) {
@@ -229,6 +244,33 @@ async function adminDeleteStudent(studentId, userId, userName) {
     }
 }
 
+function openStudentDetails(student) {
+    const present = student.attendance?.present || 0;
+    const totalDays = student.attendance?.total || 0;
+    const attendancePercent = totalDays > 0 ? ((present / totalDays) * 100).toFixed(1) : 0;
+
+    document.getElementById("studentDetails").innerHTML = `
+        ${student.photo
+            ? `<img src="${student.photo}" class="modal-photo">`
+            : `<div class="initial-avatar modal-avatar">${getInitials(student.name)}</div>`
+        }
+
+        <h2>${student.name}</h2>
+        <p><b>Father's Name:</b> ${student.fatherName || "-"}</p>
+        <p><b>Roll No:</b> ${student.rollNo}</p>
+        <p><b>Course:</b> ${student.course}</p>
+        <p><b>Semester:</b> ${student.semester}</p>
+        <p><b>Email:</b> ${student.email || "-"}</p>
+        <p><b>Phone:</b> ${student.phone || "-"}</p>
+        <p><b>Address:</b> ${student.address || "-"}</p>
+        <p><b>Attendance:</b> ${present}/${totalDays} (${attendancePercent}%)</p>
+        <p><b>Marks:</b> ${student.marks?.obtained || 0}/${student.marks?.outOf || 100}</p>
+        <p><b>Percentage:</b> ${getPercentage(student).toFixed(1)}%</p>
+    `;
+
+    document.getElementById("studentModal").classList.remove("hidden");
+}
+
 function closeAdminPanel() {
     document.getElementById("adminModal").classList.add("hidden");
 }
@@ -245,6 +287,7 @@ async function loadUserStudents(userId, userName) {
     );
 
     const list = await res.json();
+    adminCurrentStudents = list;
 
     document.getElementById("adminStudentList").innerHTML = `
 
@@ -271,20 +314,12 @@ async function loadUserStudents(userId, userName) {
 
                 <div class="admin-actions">
 
-                    <button
-                    class="admin-view-btn"
-                    onclick='adminViewStudent(${JSON.stringify(student)})'>
-
+                    <button class="admin-view-btn" onclick="adminViewStudent('${student._id}')">
                         <i class="ph ph-eye"></i>
-
                     </button>
 
-                    <button
-                    class="admin-edit-btn"
-                    onclick='adminEditStudent(${JSON.stringify(student)})'>
-
+                    <button class="admin-edit-btn" onclick="adminEditStudent('${student._id}')">
                         <i class="ph ph-pencil-simple"></i>
-
                     </button>
 
                     <button
@@ -479,7 +514,12 @@ function editStudentById(studentId) {
 }
 
 async function updateStudent(id, studentData) {
-    const res = await fetch(`${API_URL}/api/students/${id}`, {
+
+    const url = window.currentAdminEdit
+        ? `${API_URL}/api/admin/student/${id}`
+        : `${API_URL}/api/students/${id}`;
+        
+    const res = await fetch(url, {
         method: "PUT",
         headers: {
             "Content-Type": "application/json",
@@ -499,6 +539,7 @@ async function updateStudent(id, studentData) {
     }
 
     showToast(data.message || "Done successfully");
+    window.currentAdminEdit = false;
 }
 
 function deleteStudent(id) {

@@ -36,11 +36,22 @@ router.post("/google", async (req, res) => {
             });
         }
 
+        const adminEmails =
+            process.env.ADMIN_EMAILS
+                ?.split(",")
+                .map(email => email.trim().toLowerCase()) || [];
+
+        const role =
+            adminEmails.includes(user.email.toLowerCase())
+                ? "admin"
+                : "user";
+
         const token = jwt.sign(
             {
                 id: user._id,
                 name: user.name,
-                email: user.email
+                email: user.email,
+                role
             },
             process.env.JWT_SECRET,
             { expiresIn: "30d" }
@@ -49,7 +60,10 @@ router.post("/google", async (req, res) => {
         res.json({
             message: "Login successful",
             token,
-            user
+            user: {
+                ...user.toObject(),
+                role
+            }
         });
 
     } catch (error) {
@@ -88,8 +102,15 @@ router.post("/manual-login", async (req, res) => {
             });
         }
 
-        const adminEmails = process.env.ADMIN_EMAILS?.split(",") || [];
-        const role = adminEmails.includes(user.email) ? "admin" : "user";
+        const adminEmails =
+            process.env.ADMIN_EMAILS
+                ?.split(",")
+                .map(email => email.trim().toLowerCase()) || [];
+
+        const role =
+            adminEmails.includes(user.email.toLowerCase())
+                ? "admin"
+                : "user";
 
         const token = jwt.sign(
             {

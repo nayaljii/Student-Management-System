@@ -182,27 +182,123 @@ async function openAdminPanel() {
     `).join("");
 }
 
+function adminViewStudent(student) {
+
+    openStudentModal(student._id);
+}
+
+function adminEditStudent(student) {
+
+    editStudent(student);
+
+    closeAdminPanel();
+}
+
+async function adminDeleteStudent(studentId, userId, userName) {
+
+    const confirmDelete =
+        confirm("Delete this student?");
+
+    if (!confirmDelete) return;
+
+    try {
+
+        const res = await fetch(
+            `${API_URL}/api/admin/student/${studentId}`,
+            {
+                method: "DELETE",
+
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            }
+        );
+
+        const data = await res.json();
+
+        showToast(data.message);
+
+        loadUserStudents(userId, userName);
+
+    } catch (error) {
+
+        showToast(
+            "Delete failed",
+            "error"
+        );
+    }
+}
+
 function closeAdminPanel() {
     document.getElementById("adminModal").classList.add("hidden");
 }
 
 async function loadUserStudents(userId, userName) {
-    const res = await fetch(`${API_URL}/api/admin/students/${userId}`, {
-        headers: {
-            Authorization: `Bearer ${token}`
+
+    const res = await fetch(
+        `${API_URL}/api/admin/students/${userId}`,
+        {
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
         }
-    });
+    );
 
     const list = await res.json();
 
     document.getElementById("adminStudentList").innerHTML = `
-        <h3>${userName}'s Students (${list.length})</h3>
+
+        <h3>
+            ${userName}'s Students
+            (${list.length})
+        </h3>
 
         ${list.map(student => `
+
             <div class="admin-student-card">
-                <b>${student.name}</b>
-                <span>${student.rollNo} | ${student.course}</span>
+
+                <div>
+
+                    <b>${student.name}</b>
+
+                    <span>
+                        ${student.rollNo}
+                        |
+                        ${student.course}
+                    </span>
+
+                </div>
+
+                <div class="admin-actions">
+
+                    <button
+                    class="admin-view-btn"
+                    onclick='adminViewStudent(${JSON.stringify(student)})'>
+
+                        <i class="ph ph-eye"></i>
+
+                    </button>
+
+                    <button
+                    class="admin-edit-btn"
+                    onclick='adminEditStudent(${JSON.stringify(student)})'>
+
+                        <i class="ph ph-pencil-simple"></i>
+
+                    </button>
+
+                    <button
+                    class="admin-delete-btn"
+                    onclick="adminDeleteStudent('${student._id}', '${userId}', '${userName}')">
+
+                        <i class="ph ph-trash"></i>
+
+                    </button>
+
+                </div>
+
             </div>
+
         `).join("")}
     `;
 }

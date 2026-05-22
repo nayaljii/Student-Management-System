@@ -176,6 +176,40 @@ body {
     cursor: pointer;
 }
 
+.admin-actions {
+    display: flex;
+    gap: 8px;
+}
+
+.admin-actions button {
+
+    border: none;
+
+    width: 40px;
+    height: 40px;
+
+    border-radius: 12px;
+
+    cursor: pointer;
+
+    color: white;
+
+    display: grid;
+    place-items: center;
+}
+
+.admin-view-btn {
+    background: #0ea5e9;
+}
+
+.admin-edit-btn {
+    background: #8b5cf6;
+}
+
+.admin-delete-btn {
+    background: #ef4444;
+}
+
 /* Dashboard Layout */
 .dashboard {
     display: flex;

@@ -253,13 +253,13 @@ function renderStudents(data) {
             <td>${student.rollNo}</td>
             <td>${student.course}</td>
             <td>${student.semester}</td>
-            <td>${present}/${totalDays} (${attendancePercent}%)</td>
+            <td class="no-print">${present}/${totalDays} (${attendancePercent}%)</td>
             <td>${percentage}%</td>
-            <td><span class="grade">${grade}</span></td>
-            <td>${badge || "-"}</td>
+            <td class="no-print"><span class="grade">${grade}</span></td>
+            <td class="no-print">${badge || "-"}</td>
             <td><span class="status-badge">${status}</span></td>
             <td>${new Date(student.createdAt).toLocaleDateString("en-IN")}</td>
-            <td>${new Date(student.updatedAt || student.createdAt).toLocaleDateString("en-IN")}</td>
+            <td class="no-print">${new Date(student.updatedAt || student.createdAt).toLocaleDateString("en-IN")}</td>
             <td class="no-print">
                 <button class="edit-btn" onclick='editStudent(${JSON.stringify(student)})'><i class="ph ph-pencil-simple"></i></button>
                 <button class="delete-btn" onclick="deleteStudent('${student._id}')"><i class="ph ph-trash"></i></button>

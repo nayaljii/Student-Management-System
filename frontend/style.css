@@ -1008,10 +1008,6 @@ tbody tr:hover {
         border: 2px solid #d1d5db !important;
     }
     
-    th:nth-child(12),
-    td:nth-child(12),
-    th:nth-child(13),
-    td:nth-child(13),
     .print-btn,
     .csv-btn,
     .edit-btn,

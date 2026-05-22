@@ -2,6 +2,7 @@ const mongoose = require("mongoose");
 
 const studentSchema = new mongoose.Schema({
     name: { type: String, required: true },
+    fatherName: { type: String, required: true },
     rollNo: { type: String, required: true },
     course: { type: String, required: true },
     semester: { type: String, required: true },
@@ -33,9 +34,8 @@ const studentSchema = new mongoose.Schema({
     attendanceDates: [String],
 
     marks: {
-        subject1: { type: Number, default: 0 },
-        subject2: { type: Number, default: 0 },
-        subject3: { type: Number, default: 0 }
+        obtained: { type: Number, default: 0 },
+        outOf: { type: Number, default: 100 }
     },
 
     createdBy: {

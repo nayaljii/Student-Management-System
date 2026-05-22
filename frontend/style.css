@@ -1158,3 +1158,8 @@ button {
     justify-content: center;
     gap: 8px;
 }
+
+body.no-scroll {
+    overflow: hidden;
+    height: 100vh;
+}

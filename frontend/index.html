@@ -95,20 +95,19 @@
                     <input type="hidden" id="studentId">
 
                     <input type="text" id="name" placeholder="Student Name" required>
+                    <input type="text" id="fatherName" placeholder="Father's Name" required>
                     <input type="text" id="rollNo" placeholder="Roll Number" required>
                     <input type="text" id="course" placeholder="Course" required>
                     <input type="text" id="semester" placeholder="Semester" required>
-                    <input type="email" id="email" placeholder="Email">
+                    <input type="email" id="email" placeholder="Email" required>
                     <input type="text" id="phone" placeholder="Phone">
                     <input type="text" id="address" placeholder="Address">
                     <input type="file" id="photo" accept="image/*">
                     <img id="photoPreview" class="photo-preview" style="display:none;">
                     <input type="number" id="present" placeholder="Present Days">
                     <input type="number" id="total" placeholder="Total Days">
-                    <input type="number" id="subject1" placeholder="Subject 1 Marks">
-                    <input type="number" id="subject2" placeholder="Subject 2 Marks">
-                    <input type="number" id="subject3" placeholder="Subject 3 Marks">
-
+                    <input type="number" id="obtainedMarks" placeholder="Total Marks">
+                    <input type="number" id="outOfMarks" placeholder="Out Of">
                     <button type="submit" id="submitBtn"><i class="ph ph-check-circle"></i> ADD</button>
                     <button type="button" class="reset-btn" onclick="resetStudentForm()"><i class="ph ph-arrow-counter-clockwise"></i> RESET</button>
                     <button type="button" class="cancel-btn" onclick="cancelForm()"><i class="ph ph-x-circle"></i> CANCEL</button>
@@ -138,15 +137,16 @@
                             <tr>
                                 <th>Photo</th>
                                 <th>Name</th>
+                                <th>Father Name</th>
                                 <th>Roll No</th>
                                 <th>Course</th>
                                 <th>Semester</th>
                                 <th>Attendance</th>
                                 <th>Percentage</th>
                                 <th>Grade</th>
-                                <th>Reg. Date</th>
                                 <th>Badge</th>
                                 <th>Status</th>
+                                <th>Reg. Date</th>
                                 <th>Last Updated</th>
                                 <th class="no-print">Action</th>
                             </tr>

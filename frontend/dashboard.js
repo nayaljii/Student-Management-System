@@ -74,17 +74,17 @@ studentForm.addEventListener("submit", async (e) => {
     const present = Number(document.getElementById("present").value) || 0;
     const total = Number(document.getElementById("total").value) || 0;
 
-    const s1 = Number(document.getElementById("subject1").value) || 0;
-    const s2 = Number(document.getElementById("subject2").value) || 0;
-    const s3 = Number(document.getElementById("subject3").value) || 0;
+    const obtainedMarks = Number(document.getElementById("obtainedMarks").value) || 0;
+
+    const outOfMarks = Number(document.getElementById("outOfMarks").value) || 100;
 
     if (present > total) {
         showToast("Present days cannot be greater than total days", "error");
         return;
     }
 
-    if (s1 > 100 || s2 > 100 || s3 > 100 || s1 < 0 || s2 < 0 || s3 < 0) {
-        showToast("Marks must be between 0 and 100", "error");
+    if ( obtainedMarks > outOfMarks || obtainedMarks < 0 || outOfMarks <= 0 ) {
+        showToast("Marks must be valid", "error");
         return;
     }
 
@@ -114,6 +114,7 @@ studentForm.addEventListener("submit", async (e) => {
 
     const studentData = {
         name: capitalizeWords(document.getElementById("name").value),
+        fatherName: capitalizeWords( document.getElementById("fatherName").value ),
         rollNo: rollNo,
         course: document.getElementById("course").value.toUpperCase(),
         semester: capitalizeWords(document.getElementById("semester").value),
@@ -128,9 +129,8 @@ studentForm.addEventListener("submit", async (e) => {
         },
 
         marks: {
-            subject1: s1,
-            subject2: s2,
-            subject3: s3
+            obtained: obtainedMarks,
+            outOf: outOfMarks
         }
     };
 
@@ -201,7 +201,7 @@ function renderStudents(data) {
     if (data.length === 0) {
         studentTable.innerHTML = `
             <tr>
-                <td colspan="13" class="empty">
+                <td colspan="14" class="empty">
                     <div class="empty-card">
                         <h3>No Students Found</h3>
                         <p>Add your first student record to get started.</p>
@@ -253,15 +253,16 @@ function renderStudents(data) {
                 }
             </td>
             <td onclick="openStudentModal('${student._id}')">${student.name}</td>
+            <td>${student.fatherName || "-"}</td>
             <td>${student.rollNo}</td>
             <td>${student.course}</td>
             <td>${student.semester}</td>
             <td>${present}/${totalDays} (${attendancePercent}%)</td>
             <td>${percentage}%</td>
             <td><span class="grade">${grade}</span></td>
-            <td>${new Date(student.createdAt).toLocaleDateString("en-IN")}</td>
             <td>${badge || "-"}</td>
             <td><span class="status-badge">${status}</span></td>
+            <td>${new Date(student.createdAt).toLocaleDateString("en-IN")}</td>
             <td>${new Date(student.updatedAt || student.createdAt).toLocaleDateString("en-IN")}</td>
             <td class="no-print">
                 <button class="edit-btn" onclick='editStudent(${JSON.stringify(student)})'><i class="ph ph-pencil-simple"></i></button>
@@ -283,6 +284,7 @@ function editStudent(student) {
     formSection.classList.remove("hidden");
     document.getElementById("studentId").value = student._id;
     document.getElementById("name").value = student.name;
+    document.getElementById("fatherName").value = student.fatherName || "";
     document.getElementById("rollNo").value = student.rollNo;
     document.getElementById("course").value = student.course;
     document.getElementById("semester").value = student.semester;
@@ -301,9 +303,8 @@ function editStudent(student) {
     document.getElementById("present").value = student.attendance?.present || "";
     document.getElementById("total").value = student.attendance?.total || "";
 
-    document.getElementById("subject1").value = student.marks?.subject1 || "";
-    document.getElementById("subject2").value = student.marks?.subject2 || "";
-    document.getElementById("subject3").value = student.marks?.subject3 || "";
+    document.getElementById("obtainedMarks").value = student.marks?.obtained || "";
+    document.getElementById("outOfMarks").value = student.marks?.outOf || "";
 
     document.getElementById("formTitle").innerText = "Update Student";
     document.getElementById("submitBtn").innerText = "Update Student";
@@ -365,12 +366,7 @@ document.getElementById("confirmDeleteBtn").addEventListener("click", async () =
 });
 
 function getInitials(name) {
-    return name
-        .split(" ")
-        .map(word => word[0])
-        .join("")
-        .substring(0, 2)
-        .toUpperCase();
+    return name.split(" ").map(word => word[0]).join("").substring(0, 2).toUpperCase();
 }
 
 function printIdCard(student) {
@@ -578,6 +574,7 @@ setInterval(updateClock, 1000);
 updateClock();
 
 function openAbout() {
+    closeSidebar();
     document.getElementById("aboutModal").classList.remove("hidden");
     document.querySelector(".sidebar").classList.remove("show-sidebar");
     document.getElementById("sidebarOverlay").classList.add("hidden");
@@ -586,13 +583,41 @@ function openAbout() {
 
 function closeAbout() {
     document.getElementById("aboutModal").classList.add("hidden");
+    document.body.classList.remove("no-scroll");
 }
 
 function toggleSidebar() {
-    document.querySelector(".sidebar").classList.toggle("show-sidebar");
-    document.getElementById("sidebarOverlay").classList.toggle("hidden");
 
-    document.body.classList.toggle("sidebar-open");
+    const sidebar = document.querySelector(".sidebar");
+
+    const overlay = document.getElementById("sidebarOverlay");
+
+    const isOpen = sidebar.classList.contains("show-sidebar");
+
+    if (isOpen) {
+
+        sidebar.classList.remove("show-sidebar");
+
+        overlay.classList.add("hidden");
+
+        document.body.classList.remove("no-scroll");
+
+    } else {
+
+        sidebar.classList.add("show-sidebar");
+
+        overlay.classList.remove("hidden");
+
+        document.body.classList.add("no-scroll");
+    }
+}
+
+function closeSidebar() {
+    document.querySelector(".sidebar").classList.remove("show-sidebar");
+
+    document.getElementById("sidebarOverlay").classList.add("hidden");
+
+    document.body.classList.remove("no-scroll");
 }
 
 function showToast(message, type = "success") {
@@ -607,10 +632,16 @@ function showToast(message, type = "success") {
 }
 
 function getPercentage(student) {
-    const s1 = student.marks?.subject1 || 0;
-    const s2 = student.marks?.subject2 || 0;
-    const s3 = student.marks?.subject3 || 0;
-    return ((s1 + s2 + s3) / 300 * 100);
+
+    const obtained =
+        student.marks?.obtained || 0;
+
+    const outOf =
+        student.marks?.outOf || 100;
+
+    return outOf > 0
+        ? ((obtained / outOf) * 100)
+        : 0;
 }
 
 function isTopper(student, list) {
@@ -674,6 +705,8 @@ function openStudentModal(studentId) {
 
         <h2>${student.name}</h2>
 
+        <p> <b>Father's Name:</b> ${student.fatherName || "-"} </p>
+
         <p><b>Roll No:</b> ${student.rollNo}</p>
 
         <p><b>Course:</b> ${student.course}</p>
@@ -700,15 +733,20 @@ function openStudentModal(studentId) {
         </p>
 
         <p>
+            <b>Marks:</b>
+            ${student.marks?.obtained || 0}
+            /
+            ${student.marks?.outOf || 100}
+        </p>
+
+        <p>
             <b>Percentage:</b>
+            ${student.marks?.obtained || 0}/${student.marks?.outOf || 100}
             ${getPercentage(student).toFixed(1)}%
         </p>
     `;
 
-    document
-        .getElementById("studentModal")
-        .classList
-        .remove("hidden");
+    document.getElementById("studentModal").classList.remove("hidden");
 }
 
 function closeStudentModal() {
@@ -940,13 +978,11 @@ async function saveBulkAttendance() {
 
 function showMonthAttendance(studentId) {
 
-    const student =
-        students.find(s => s._id === studentId);
+    const student = students.find(s => s._id === studentId);
 
     if (!student) return;
 
-    const history =
-        student.attendanceHistory || [];
+    const history = student.attendanceHistory || [];
 
     let html = `
         ${student.photo

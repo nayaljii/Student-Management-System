@@ -58,6 +58,49 @@ router.post("/google", async (req, res) => {
     }
 });
 
+router.post("/manual-login", async (req, res) => {
+    try {
+        const { email, password } = req.body;
+
+        const user = await User.findOne({ email });
+
+        if (!user || !user.password) {
+            return res.status(400).json({
+                message: "Please set your password first using Google login"
+            });
+        }
+
+        const isMatch = await bcrypt.compare(password, user.password);
+
+        if (!isMatch) {
+            return res.status(400).json({
+                message: "Invalid email or password"
+            });
+        }
+
+        const token = jwt.sign(
+            {
+                id: user._id,
+                name: user.name,
+                email: user.email
+            },
+            process.env.JWT_SECRET,
+            { expiresIn: "30d" }
+        );
+
+        res.json({
+            message: "Login successful",
+            token,
+            user
+        });
+
+    } catch (error) {
+        res.status(500).json({
+            message: "Manual login failed"
+        });
+    }
+});
+
 router.put("/change-password", async (req, res) => {
     try {
         const { userId, newPassword } = req.body;

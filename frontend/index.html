@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@phosphor-icons/web@2.1.1/src/regular/style.css">
-    <title>Student Management System</title>
+    <title>StudentInfo</title>
 </head>
 <body>
     <main class="dashboard">
@@ -13,7 +13,7 @@
             <div class="mobile-brand">
                 <div class="brand-logo" onclick="location.reload()">🎓</div>
                 <div>
-                    <h2>Student Info</h2>
+                    <h2>Student Manager</h2>
                     <p>Student Panel</p>
                 </div>
             </div>
@@ -23,7 +23,7 @@
             <div class="brand">
                 <div class="brand-logo" onclick="location.reload()">🎓</div>
                 <div>
-                    <h2>Student Info</h2>
+                    <h2>Student Manager</h2>
                     <p>Student Panel</p>
                 </div>
             </div>
@@ -98,7 +98,7 @@
                     <input type="text" id="fatherName" placeholder="Father's Name" required>
                     <input type="text" id="rollNo" placeholder="Roll Number" required>
                     <input type="text" id="course" placeholder="Course" required>
-                    <input type="text" id="semester" placeholder="Semester" required>
+                    <input type="text" id="semester" placeholder="Year/Semester">
                     <input type="email" id="email" placeholder="Email" required>
                     <input type="text" id="phone" placeholder="Phone">
                     <input type="text" id="address" placeholder="Address">
@@ -116,6 +116,12 @@
 
             <button class="attendance-main-btn" onclick="openBulkAttendanceModal()">
                 <i class="ph ph-calendar-check"></i> Attendance</button>
+
+            <button class="reset-attendance-btn" onclick="resetAttendance()">
+                <i class="ph ph-arrow-clockwise"></i>Reset Attendance</button>
+            
+            <button class="summary-btn" onclick="openCourseSummary()">
+                <i class="ph ph-chart-pie-slice"></i> Course</button>
 
             <section class="table-section">
                 <h2>Student Records</h2>
@@ -157,8 +163,11 @@
                     <p id="resultCount" class="result-count"></p>
                 </div>
             </section>
+            <button class="id-all-btn" onclick="printAllIdCards()">
+                <i class="ph ph-identification-card"></i>Print All</button>
         </section>
 
+        // Modals and overlays
         <div class="sidebar-overlay hidden" id="sidebarOverlay" onclick="toggleSidebar()"></div>
         <div class="about-modal hidden" id="aboutModal">
             <div class="about-box">
@@ -233,6 +242,18 @@
                         Cancel
                     </button>
                 </div>
+            </div>
+        </div>
+
+        <div class="course-modal hidden" id="courseModal">
+            <div class="course-box">
+                <button class="close-modal" onclick="closeCourseSummary()">×</button>
+                <h2>
+                    <i class="ph ph-chart-pie-slice"></i>
+                    Course Summary
+                </h2>
+
+                <div id="courseSummaryList"></div>
             </div>
         </div>
     </main>

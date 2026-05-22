@@ -932,6 +932,75 @@ tbody tr:hover {
     color: #e5e7eb;
 }
 
+.summary-btn,
+.id-all-btn,
+.reset-attendance-btn {
+    border: none;
+    padding: 15px 24px;
+    border-radius: 16px;
+    color: white;
+    font-weight: 800;
+    cursor: pointer;
+    margin-left: 10px;
+    margin-bottom: 24px;
+}
+
+.summary-btn {
+    background: linear-gradient(135deg, #8b5cf6, #6366f1);
+}
+
+.id-all-btn {
+    background: linear-gradient(135deg, #0ea5e9, #2563eb);
+}
+
+.reset-attendance-btn {
+    background: linear-gradient(135deg, #ef4444, #f97316);
+}
+
+.course-modal {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.7);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1700;
+}
+
+.course-box {
+    width: 90%;
+    max-width: 520px;
+    max-height: 85vh;
+    overflow-y: auto;
+    padding: 28px;
+    border-radius: 26px;
+    background: #111827;
+    box-shadow: 0 25px 80px rgba(0,0,0,0.5);
+    position: relative;
+}
+
+.course-box h2 {
+    margin-bottom: 20px;
+}
+
+.course-summary-card {
+    padding: 16px;
+    border-radius: 18px;
+    background: rgba(255,255,255,0.06);
+    margin-bottom: 14px;
+}
+
+.course-summary-card h3 {
+    margin-bottom: 10px;
+    color: #93c5fd;
+}
+
+.course-summary-card li {
+    margin-left: 18px;
+    color: #cbd5e1;
+    margin-bottom: 6px;
+}
+
 /* Print */
 @media print {
 
@@ -1136,6 +1205,13 @@ tbody tr:hover {
         width: 100%;
         margin-left: 0;
     }
+
+    .summary-btn,
+    .id-all-btn,
+    .reset-attendance-btn {
+        width: 100%;
+        margin-left: 0;
+    }
 }
 
 @media (max-width: 1200px) {
@@ -1158,4 +1234,8 @@ button {
 body.no-scroll {
     overflow: hidden;
     height: 100vh;
+}
+
+html {
+    scroll-behavior: smooth;
 }

@@ -41,23 +41,51 @@ router.get("/", authMiddleware, async (req, res) => {
 });
 
 router.put("/:id", authMiddleware, async (req, res) => {
+
     try {
-        const student = await Student.findOneAndUpdate(
-            { _id: req.params.id, createdBy: req.user.id },
-            req.body,
-            { new: true }
-        );
+
+        const student = await Student.findOne({
+            _id: req.params.id,
+            createdBy: req.user.id
+        });
 
         if (!student) {
-            return res.status(404).json({ message: "Student not found" });
+            return res.status(404).json({
+                message: "Student not found"
+            });
         }
+
+        // Daily attendance lock
+        const today = new Date().toLocaleDateString("en-CA", {
+            timeZone: "Asia/Kolkata"
+        });
+
+        if (
+            req.body.attendanceDates &&
+            req.body.attendanceDates.includes(today) &&
+            student.attendanceDates?.includes(today)
+        ) {
+            return res.status(400).json({
+                message: "Attendance already marked for today"
+            });
+        }
+
+        Object.assign(student, req.body);
+
+        await student.save();
 
         res.json({
             message: "Student updated successfully",
             student
         });
+
     } catch (error) {
-        res.status(500).json({ message: "Failed to update student" });
+
+        console.log(error);
+
+        res.status(500).json({
+            message: "Failed to update student"
+        });
     }
 });
 

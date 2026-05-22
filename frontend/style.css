@@ -1557,6 +1557,111 @@ tbody tr:hover {
         width: 100%;
         margin-left: 0;
     }
+
+    .admin-modal {
+        padding: 14px;
+        align-items: flex-start;
+        overflow-y: auto;
+    }
+
+    .admin-box {
+
+        width: 100%;
+        max-width: 100%;
+
+        max-height: none;
+
+        padding: 22px 16px;
+
+        border-radius: 24px;
+
+        margin-top: 30px;
+    }
+
+    .admin-box h2 {
+
+        font-size: 32px;
+
+        padding-right: 50px;
+    }
+
+    .admin-user-card {
+
+        display: flex;
+        flex-direction: column;
+
+        align-items: flex-start;
+
+        gap: 16px;
+
+        padding: 18px;
+    }
+
+    .admin-user-card b {
+
+        font-size: 24px;
+
+        line-height: 1.3;
+
+        word-break: break-word;
+    }
+
+    .admin-user-card p {
+
+        font-size: 16px;
+
+        word-break: break-word;
+
+        line-height: 1.5;
+    }
+
+    .admin-user-card button {
+
+        width: 100%;
+
+        height: 50px;
+
+        border-radius: 14px;
+
+        font-size: 15px;
+    }
+
+    .close-modal {
+
+        width: 44px;
+        height: 44px;
+
+        font-size: 22px;
+
+        top: 16px;
+        right: 16px;
+    }
+
+    .admin-student-card {
+
+        flex-direction: column;
+
+        align-items: flex-start;
+
+        gap: 14px;
+    }
+
+    .admin-actions {
+
+        width: 100%;
+
+        display: flex;
+
+        justify-content: flex-start;
+
+        flex-wrap: wrap;
+    }
+
+    .admin-actions button {
+
+        width: 46px;
+        height: 46px;
+    }
 }
 
 @media (max-width: 1200px) {
@@ -1578,7 +1683,7 @@ button {
 
 body.no-scroll {
     overflow: hidden;
-    height: 100vh;
+    height: 100dvh;
 }
 
 html {

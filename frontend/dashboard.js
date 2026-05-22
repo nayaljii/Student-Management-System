@@ -160,6 +160,9 @@ studentForm.addEventListener("submit", async (e) => {
 });
 
 async function openAdminPanel() {
+
+    enableNoScroll();
+
     document.getElementById("adminModal").classList.remove("hidden");
 
     const res = await fetch(`${API_URL}/api/admin/users`, {
@@ -245,6 +248,9 @@ async function adminDeleteStudent(studentId, userId, userName) {
 }
 
 function openStudentDetails(student) {
+
+    enableNoScroll();
+
     const present = student.attendance?.present || 0;
     const totalDays = student.attendance?.total || 0;
     const attendancePercent = totalDays > 0 ? ((present / totalDays) * 100).toFixed(1) : 0;
@@ -272,7 +278,14 @@ function openStudentDetails(student) {
 }
 
 function closeAdminPanel() {
-    document.getElementById("adminModal").classList.add("hidden");
+    document
+        .getElementById("adminModal")
+        .classList
+        .add("hidden");
+
+    document.getElementById("adminStudentList").innerHTML = "";
+
+    disableNoScroll();
 }
 
 async function loadUserStudents(userId, userName) {
@@ -781,15 +794,22 @@ updateClock();
 
 function openAbout() {
     closeSidebar();
-    document.getElementById("aboutModal").classList.remove("hidden");
-    document.querySelector(".sidebar").classList.remove("show-sidebar");
-    document.getElementById("sidebarOverlay").classList.add("hidden");
-    document.body.classList.remove("sidebar-open");
+
+    document
+        .getElementById("aboutModal")
+        .classList
+        .remove("hidden");
+
+    enableNoScroll();
 }
 
 function closeAbout() {
-    document.getElementById("aboutModal").classList.add("hidden");
-    document.body.classList.remove("no-scroll");
+    document
+        .getElementById("aboutModal")
+        .classList
+        .add("hidden");
+
+    disableNoScroll();
 }
 
 function toggleSidebar() {
@@ -889,6 +909,8 @@ function updateStats(data) {
 
 function openStudentModal(studentId) {
 
+    enableNoScroll();
+    
     const student = students.find(s => s._id === studentId);
 
     if (!student) return;
@@ -956,7 +978,12 @@ function openStudentModal(studentId) {
 }
 
 function closeStudentModal() {
-    document.getElementById("studentModal").classList.add("hidden");
+    document
+        .getElementById("studentModal")
+        .classList
+        .add("hidden");
+
+    disableNoScroll();
 }
 
 function exportCSV() {
@@ -1118,11 +1145,21 @@ function openBulkAttendanceModal() {
         list.appendChild(div);
     });
 
-    document.getElementById("bulkAttendanceModal").classList.remove("hidden");
+    document
+        .getElementById("bulkAttendanceModal")
+        .classList
+        .remove("hidden");
+
+    enableNoScroll();
 }
 
 function closeBulkAttendanceModal() {
-    document.getElementById("bulkAttendanceModal").classList.add("hidden");
+    document
+        .getElementById("bulkAttendanceModal")
+        .classList
+        .add("hidden");
+
+    disableNoScroll();
 }
 
 async function saveBulkAttendance() {
@@ -1316,11 +1353,21 @@ function openCourseSummary() {
     document.getElementById("courseSummaryList").innerHTML =
         html || "<p>No course data found</p>";
 
-    document.getElementById("courseModal").classList.remove("hidden");
+    document
+        .getElementById("courseModal")
+        .classList
+        .remove("hidden");
+
+    enableNoScroll();
 }
 
 function closeCourseSummary() {
-    document.getElementById("courseModal").classList.add("hidden");
+    document
+        .getElementById("courseModal")
+        .classList
+        .add("hidden");
+
+    disableNoScroll();
 }
 
 async function resetAttendance() {
@@ -1501,19 +1548,23 @@ function printAllIdCards() {
 }
 
 function openPasswordModal() {
+    closeSidebar();
 
     document
         .getElementById("passwordModal")
         .classList
         .remove("hidden");
+
+    enableNoScroll();
 }
 
 function closePasswordModal() {
-
     document
         .getElementById("passwordModal")
         .classList
         .add("hidden");
+
+    disableNoScroll();
 }
 
 function togglePassword(inputId, icon) {
@@ -1563,6 +1614,14 @@ async function savePassword() {
     showToast(data.message);
 
     closePasswordModal();
+}
+
+function enableNoScroll() {
+    document.body.classList.add("no-scroll");
+}
+
+function disableNoScroll() {
+    document.body.classList.remove("no-scroll");
 }
 
 function logout() {

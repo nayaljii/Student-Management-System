@@ -2,6 +2,7 @@ const express = require("express");
 const jwt = require("jsonwebtoken");
 const { OAuth2Client } = require("google-auth-library");
 const User = require("../models/User");
+const bcrypt = require("bcryptjs");
 
 const router = express.Router();
 
@@ -54,6 +55,34 @@ router.post("/google", async (req, res) => {
     } catch (error) {
         console.log(error);
         res.status(500).json({ message: "Google login failed" });
+    }
+});
+
+router.put("/change-password", async (req, res) => {
+    try {
+        const { userId, newPassword } = req.body;
+
+        if (!newPassword || newPassword.length < 6) {
+            return res.status(400).json({
+                message: "Password must be at least 6 characters"
+            });
+        }
+
+        const hashedPassword = await bcrypt.hash(newPassword, 10);
+
+        await User.findByIdAndUpdate(userId, {
+            password: hashedPassword,
+            authProvider: "manual"
+        });
+
+        res.json({
+            message: "Password updated successfully"
+        });
+
+    } catch (error) {
+        res.status(500).json({
+            message: "Failed to update password"
+        });
     }
 });
 

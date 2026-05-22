@@ -36,10 +36,10 @@
                         <p id="profileName">User</p>
                     </div>
                 </div>
-                <button class="about-btn" onclick="openAbout()"><i class="ph ph-info"></i> ABOUT</button>
             </nav>
-
-            <button onclick="logout()" class="logout-btn"><i class="ph ph-sign-out"> LOGOUT</i></button>
+            
+            <button class="about-btn" onclick="openAbout()"><i class="ph ph-info"></i> ABOUT</button>
+            <button onclick="logout()" class="logout-btn"><i class="ph ph-sign-out"></i> LOGOUT</button>
         </aside>
         
         <section class="main-content">
@@ -164,10 +164,10 @@
                 </div>
             </section>
             <button class="id-all-btn" onclick="printAllIdCards()">
-                <i class="ph ph-identification-card"></i>Print All</button>
+                <i class="ph ph-identification-card"></i>Print All ID Cards</button>
         </section>
 
-        // Modals and overlays
+        <!-- Modals and overlays -->
         <div class="sidebar-overlay hidden" id="sidebarOverlay" onclick="toggleSidebar()"></div>
         <div class="about-modal hidden" id="aboutModal">
             <div class="about-box">
@@ -234,7 +234,7 @@
                 <div class="attendance-actions">
                     <button onclick="saveBulkAttendance()">
                         <i class="ph ph-check-circle"></i>
-                        Save Attendance
+                        Save
                     </button>
 
                     <button onclick="closeBulkAttendanceModal()">

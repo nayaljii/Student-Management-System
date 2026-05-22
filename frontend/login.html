@@ -27,6 +27,36 @@
             data-shape="pill"
             data-logo_alignment="left">
         </div>
+
+        <div class="manual-login">
+
+            <h3>Manual Login</h3>
+
+            <input
+            type="email"
+            id="loginEmail"
+            placeholder="Email Address">
+
+            <div class="password-input-box">
+
+                <input
+                type="password"
+                id="loginPassword"
+                placeholder="Password">
+
+                <i
+                class="ph ph-eye"
+                onclick="togglePassword('loginPassword', this)">
+                </i>
+
+            </div>
+
+            <button onclick="manualLogin()">
+                <i class="ph ph-sign-in"></i>
+                Login
+            </button>
+
+        </div>
     </div>
 
     <script src="auth.js"></script>

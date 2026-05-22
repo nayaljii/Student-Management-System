@@ -62,9 +62,6 @@ let deleteStudentId = null;
 if (userInfo && user) {
     userInfo.innerText = `Welcome, ${user.name}`;
 }
-if (user) {
-    document.getElementById("profileName").innerText = user.name || "User";
-}
 
 studentForm.addEventListener("submit", async (e) => {
     e.preventDefault();
@@ -121,7 +118,11 @@ studentForm.addEventListener("submit", async (e) => {
         email: email,
         phone: phone,
         address: document.getElementById("address").value,
-        photo: photoBase64,
+        photo: photoBase64 || (
+            studentId
+                ? students.find(s => s._id === studentId)?.photo
+                : ""
+        ),
 
         attendance: {
             present: present,
@@ -143,7 +144,10 @@ studentForm.addEventListener("submit", async (e) => {
     studentForm.reset();
     document.getElementById("studentId").value = "";
     document.getElementById("formTitle").innerText = "Add Student";
-    document.getElementById("submitBtn").innerText = "Add Student";
+    document.getElementById("submitBtn").innerHTML = `
+        <i class="ph ph-check-circle"></i>
+        Add
+    `;
 
     cancelForm();
     fetchStudents();
@@ -261,7 +265,7 @@ function renderStudents(data) {
             <td>${new Date(student.createdAt).toLocaleDateString("en-IN")}</td>
             <td class="no-print">${new Date(student.updatedAt || student.createdAt).toLocaleDateString("en-IN")}</td>
             <td class="no-print">
-                <button class="edit-btn" onclick='editStudent(${JSON.stringify(student)})'><i class="ph ph-pencil-simple"></i></button>
+                <button class="edit-btn" onclick="editStudentById('${student._id}')"><i class="ph ph-pencil-simple"></i></button>
                 <button class="delete-btn" onclick="deleteStudent('${student._id}')"><i class="ph ph-trash"></i></button>
                 <button class="id-btn" onclick='printIdCard(${JSON.stringify(student)})'><i class="ph ph-identification-card"></i></button>
             </td>
@@ -303,12 +307,25 @@ function editStudent(student) {
     document.getElementById("outOfMarks").value = student.marks?.outOf || "";
 
     document.getElementById("formTitle").innerText = "Update Student";
-    document.getElementById("submitBtn").innerText = "Update Student";
+    document.getElementById("submitBtn").innerHTML = `
+        <i class="ph ph-check-circle"></i>
+        Update
+    `;
 
     window.scrollTo({
         top: 0,
         behavior: "smooth"
     });
+}
+
+function editStudentById(studentId) {
+
+    const student =
+        students.find(s => s._id === studentId);
+
+    if (!student) return;
+
+    editStudent(student);
 }
 
 async function updateStudent(id, studentData) {
@@ -801,7 +818,54 @@ function changePage(step) {
 }
 
 function toggleProfileMenu() {
-    document.getElementById("profileMenu").classList.toggle("hidden");
+
+    const menu =
+        document.getElementById("profileMenu");
+
+    const user =
+        JSON.parse(
+            localStorage.getItem("sms_user")
+        );
+
+    if (
+        !menu.classList.contains("hidden")
+    ) {
+
+        menu.classList.add("hidden");
+
+        return;
+    }
+
+    menu.innerHTML = `
+        <div class="profile-user">
+
+            <img
+            src="${user.picture}"
+            class="profile-avatar">
+
+            <h3>${user.name || "User"}</h3>
+
+            <p class="profile-email">
+
+                <i class="ph ph-envelope"></i>
+
+                ${user.email || "No Email"}
+
+            </p>
+
+            <button
+            class="change-password-btn"
+            onclick="openPasswordModal()">
+
+                <i class="ph ph-lock-key"></i>
+
+                Update / Change Password
+            </button>
+
+        </div>
+    `;
+
+    menu.classList.remove("hidden");
 }
 
 function capitalizeWords(text) {
@@ -1243,6 +1307,71 @@ function printAllIdCards() {
     `);
 
     printWindow.document.close();
+}
+
+function openPasswordModal() {
+
+    document
+        .getElementById("passwordModal")
+        .classList
+        .remove("hidden");
+}
+
+function closePasswordModal() {
+
+    document
+        .getElementById("passwordModal")
+        .classList
+        .add("hidden");
+}
+
+function togglePassword(inputId, icon) {
+
+    const input =
+        document.getElementById(inputId);
+
+    if (input.type === "password") {
+
+        input.type = "text";
+
+        icon.classList.remove("ph-eye");
+
+        icon.classList.add("ph-eye-slash");
+
+    } else {
+
+        input.type = "password";
+
+        icon.classList.remove("ph-eye-slash");
+
+        icon.classList.add("ph-eye");
+    }
+}
+
+async function savePassword() {
+    const password = document.getElementById("newPassword").value;
+    const user = JSON.parse(localStorage.getItem("sms_user"));
+
+    if (password.length < 6) {
+        showToast("Password must be at least 6 characters", "error");
+        return;
+    }
+
+    const res = await fetch(`${API_URL}/api/auth/change-password`, {
+        method: "PUT",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+            userId: user._id,
+            newPassword: password
+        })
+    });
+
+    const data = await res.json();
+    showToast(data.message);
+
+    closePasswordModal();
 }
 
 function logout() {

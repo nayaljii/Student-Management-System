@@ -11,6 +11,11 @@ const userSchema = new mongoose.Schema({
         type: String,
         required: true
     },
+    password: String,
+    authProvider: {
+        type: String,
+        default: "google"
+    },
     picture: String
 }, { timestamps: true });
 

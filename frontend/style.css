@@ -83,6 +83,7 @@ body.sidebar-open {
     border-right: 1px solid rgba(255,255,255,0.09);
     display: flex;
     flex-direction: column;
+    gap: 10px;
 }
 
 .brand {

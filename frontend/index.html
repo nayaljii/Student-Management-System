@@ -121,7 +121,7 @@
                 <i class="ph ph-arrow-clockwise"></i>Reset Attendance</button>
             
             <button class="summary-btn" onclick="openCourseSummary()">
-                <i class="ph ph-chart-pie-slice"></i> Course</button>
+                <i class="ph ph-chart-pie-slice"></i> Course Summary</button>
 
             <section class="table-section">
                 <h2>Student Records</h2>
@@ -254,6 +254,35 @@
                 </h2>
 
                 <div id="courseSummaryList"></div>
+            </div>
+        </div>
+
+        <div class="password-modal hidden" id="passwordModal">
+            <div class="password-box">
+                <h2>
+                    <i class="ph ph-lock-key"></i>
+                    Change Password
+                </h2>
+
+                <p class="password-note">
+                    Google users don't have a password yet.
+                </p>
+
+                <div class="password-input-box">
+                    <input type="password" id="newPassword" placeholder="New Password">
+
+                    <i class="ph ph-eye" onclick="togglePassword('newPassword', this)"></i>
+                </div>
+
+                <button onclick="savePassword()">
+                    <i class="ph ph-check-circle"></i>
+                    Save
+                </button>
+
+                <button class="cancel-password-btn" onclick="closePasswordModal()">
+                    <i class="ph ph-x-circle"></i>
+                    Cancel
+                </button>
             </div>
         </div>
     </main>

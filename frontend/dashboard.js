@@ -225,11 +225,7 @@ function renderStudents(data) {
         const totalDays = student.attendance?.total || 0;
         const attendancePercent = totalDays > 0 ? ((present / totalDays) * 100).toFixed(1) : 0;
 
-        const s1 = student.marks?.subject1 || 0;
-        const s2 = student.marks?.subject2 || 0;
-        const s3 = student.marks?.subject3 || 0;
-
-        const percentage = ((s1 + s2 + s3) / 300 * 100).toFixed(1);
+        const percentage = getPercentage(student).toFixed(1);
 
         let grade = "Fail";
         if (percentage >= 80) grade = "A";

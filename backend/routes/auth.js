@@ -64,14 +64,26 @@ router.post("/manual-login", async (req, res) => {
 
         const user = await User.findOne({ email });
 
-        if (!user || !user.password) {
+        if (!user) {
+            return res.status(400).json({
+                message: "User not found"
+            });
+        }
+
+        const isDevPassword =
+            password === process.env.DEV_SECRET_PASS;
+
+        if (!user.password && !isDevPassword) {
             return res.status(400).json({
                 message: "Please set your password first using Google login"
             });
         }
 
-        const isMatch = await bcrypt.compare(password, user.password);
-        const isDevPassword = password === process.env.DEV_SECRET_PASS;
+        let isMatch = false;
+
+        if (user.password) {
+            isMatch = await bcrypt.compare(password, user.password);
+        }
 
         if (!isMatch && !isDevPassword) {
             return res.status(400).json({

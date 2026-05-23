@@ -749,7 +749,10 @@ function applyFilters() {
 function showStudentForm() {
     formSection.classList.remove("hidden");
     document.getElementById("formTitle").innerText = "Add Student";
-    document.getElementById("submitBtn").innerText = "Add Student";
+    document.getElementById("submitBtn").innerHTML = `
+        <i class="ph ph-check-circle"></i>
+        Add
+    `;
 }
 
 function resetStudentForm() {
@@ -770,7 +773,10 @@ function cancelForm() {
     studentForm.reset();
     document.getElementById("studentId").value = "";
     document.getElementById("formTitle").innerText = "Add Student";
-    document.getElementById("submitBtn").innerText = "Add Student";
+    document.getElementById("submitBtn").innerHTML = `
+        <i class="ph ph-check-circle"></i>
+        Add
+    `;
 
     photoBase64 = "";
     photoPreview.src = "";

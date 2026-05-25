@@ -1132,33 +1132,55 @@ function hideLoader() {
 
 function openCourseAttendanceSelector() {
 
-    const courses =
-        [...new Set(
-            students.map(s => s.course)
-        )];
+    const courseData = {};
 
-    const courseList =
-        document.getElementById("courseAttendanceList");
+    students.forEach(student => {
 
-    courseList.innerHTML = "";
+        const course =
+            student.course || "Unknown";
 
-    courses.forEach(course => {
+        if (!courseData[course]) {
 
-        courseList.innerHTML += `
+            courseData[course] = [];
+        }
 
-            <button
-            class="course-select-btn"
+        courseData[course].push(student);
+    });
+
+    let html = "";
+
+    Object.keys(courseData).forEach(course => {
+
+        html += `
+
+            <div
+            class="course-summary-card attendance-course-card"
             onclick="openBulkAttendanceModal('${course}')">
 
-                ${course}
+                <h3>
 
-            </button>
+                    ${course}
 
+                    (${courseData[course].length})
+
+                </h3>
+
+                <p>
+
+                    Click to mark attendance
+
+                </p>
+
+            </div>
         `;
     });
 
     document
-        .getElementById("courseAttendanceModal")
+        .getElementById("courseSummaryList")
+        .innerHTML = html;
+
+    document
+        .getElementById("courseModal")
         .classList
         .remove("hidden");
 
@@ -1524,56 +1546,6 @@ async function resetAttendanceByCourse(course) {
     fetchStudents();
 
     closeResetAttendanceModal();
-}
-
-async function resetAttendance() {
-    const confirmReset = confirm(
-        "Are you sure you want to reset attendance for all students?"
-    );
-
-    if (!confirmReset) return;
-
-    try {
-        const updatePromises = students.map(student => {
-            const updatedStudent = {
-                name: student.name,
-                fatherName: student.fatherName,
-                rollNo: student.rollNo,
-                course: student.course,
-                semester: student.semester,
-                email: student.email,
-                phone: student.phone,
-                address: student.address,
-                photo: student.photo,
-                marks: student.marks,
-
-                attendance: {
-                    present: 0,
-                    total: 0
-                },
-
-                attendanceHistory: [],
-                attendanceDates: []
-            };
-
-            return fetch(`${API_URL}/api/students/${student._id}`, {
-                method: "PUT",
-                headers: {
-                    "Content-Type": "application/json",
-                    Authorization: `Bearer ${token}`
-                },
-                body: JSON.stringify(updatedStudent)
-            });
-        });
-
-        await Promise.all(updatePromises);
-
-        showToast("Attendance reset successfully");
-        fetchStudents();
-
-    } catch (error) {
-        showToast("Failed to reset attendance", "error");
-    }
 }
 
 function closeResetAttendanceModal() {

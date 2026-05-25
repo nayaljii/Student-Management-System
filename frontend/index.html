@@ -121,7 +121,7 @@
             <button class="attendance-main-btn" onclick="openCourseAttendanceSelector()">
                 <i class="ph ph-calendar-check"></i> Attendance</button>
 
-            <button class="reset-attendance-btn" onclick="resetAttendance()">
+            <button class="reset-attendance-btn" onclick="openResetAttendanceSelector()">
                 <i class="ph ph-arrow-clockwise"></i>Reset Attendance</button>
             
             <button class="summary-btn" onclick="openCourseSummary()">
@@ -234,20 +234,6 @@
                     <button id="confirmDeleteBtn"><i class="ph ph-trash"> YES</i></button>
                     <button onclick="closeDeleteModal()"><i class="ph ph-x"> NO</i></button>
                 </div>
-            </div>
-        </div>
-
-        <div class="modal hidden" id="courseAttendanceModal">
-            <div class="modal-box">
-
-                <h2>Select Course</h2>
-
-                <div id="courseAttendanceList"></div>
-
-                <button onclick="closeCourseAttendanceModal()"><i class="ph ph-x-circle"></i>
-                    Close
-                </button>
-
             </div>
         </div>
 

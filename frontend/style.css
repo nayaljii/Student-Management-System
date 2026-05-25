@@ -1346,6 +1346,14 @@ tbody tr:hover {
     }
 }
 
+.attendance-course-card {
+    cursor: pointer;
+}
+
+.attendance-course-card:hover {
+    transform: translateY(-4px);
+}
+
 .course-select-btn {
 
     width: 100%;

@@ -1538,16 +1538,7 @@ async function resetAttendanceByCourse(course) {
 
     fetchStudents();
 
-    closeResetAttendanceModal();
-}
-
-function closeResetAttendanceModal() {
-    document
-        .getElementById("resetAttendanceModal")
-        .classList
-        .add("hidden");
-
-    disableNoScroll();
+    closeCourseSummary();
 }
 
 function printAllIdCards() {

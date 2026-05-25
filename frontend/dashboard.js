@@ -60,6 +60,8 @@ let adminCurrentStudents = [];
 let students = [];
 let currentFilteredStudents = [];
 
+let selectedAttendanceCourse = "";
+
 let currentPage = 1;
 const studentsPerPage = 5;
 
@@ -1128,27 +1130,81 @@ function hideLoader() {
     });
 }
 
-function openBulkAttendanceModal() {
-    const list = document.getElementById("attendanceStudentList");
+function openCourseAttendanceSelector() {
+
+    const courses =
+        [...new Set(
+            students.map(s => s.course)
+        )];
+
+    const courseList =
+        document.getElementById("courseAttendanceList");
+
+    courseList.innerHTML = "";
+
+    courses.forEach(course => {
+
+        courseList.innerHTML += `
+
+            <button
+            class="course-select-btn"
+            onclick="openBulkAttendanceModal('${course}')">
+
+                ${course}
+
+            </button>
+
+        `;
+    });
+
+    document
+        .getElementById("courseAttendanceModal")
+        .classList
+        .remove("hidden");
+
+    enableNoScroll();
+}
+
+function openBulkAttendanceModal(course) {
+
+    selectedAttendanceCourse = course;
+
+    const filteredStudents =
+        students.filter(
+            s => s.course === course
+        );
+
+    const list =
+        document.getElementById(
+            "attendanceStudentList"
+        );
 
     list.innerHTML = "";
 
-    if (students.length === 0) {
-        list.innerHTML = "<p>No students found</p>";
-    }
+    filteredStudents.forEach(student => {
 
-    students.forEach((student) => {
-        const div = document.createElement("div");
-        div.className = "attendance-student-item";
+        list.innerHTML += `
 
-        div.innerHTML = `
-            <label>
-                <input type="checkbox" class="attendance-check" value="${student._id}">
-                <span>${student.name} - ${student.rollNo}</span>
-            </label>
+            <div class="attendance-student-item">
+
+                <label>
+
+                    <input
+                    type="checkbox"
+                    class="attendance-check"
+                    value="${student._id}">
+
+                    <span>
+
+                        ${student.name}
+                        (${student.rollNo})
+
+                    </span>
+
+                </label>
+
+            </div>
         `;
-
-        list.appendChild(div);
     });
 
     document
@@ -1156,7 +1212,10 @@ function openBulkAttendanceModal() {
         .classList
         .remove("hidden");
 
-    enableNoScroll();
+    document
+        .getElementById("courseAttendanceModal")
+        .classList
+        .add("hidden");
 }
 
 function closeBulkAttendanceModal() {
@@ -1174,6 +1233,8 @@ async function saveBulkAttendance() {
     ).map(input => input.value);
 
     if (students.length === 0) return;
+    
+    const courseStudents = students.filter( s => s.course === selectedAttendanceCourse );
 
     try {
         showToast("Updating attendance...");
@@ -1187,7 +1248,7 @@ async function saveBulkAttendance() {
             timeZone: "Asia/Kolkata"
         });
 
-        const alreadyMarked = students.some(student =>
+        const alreadyMarked = courseStudents.some(student =>
             student.attendanceDates?.includes(today)
         );
 
@@ -1196,7 +1257,7 @@ async function saveBulkAttendance() {
             return;
         }
 
-        const updatePromises = students.map((student) => {
+        const updatePromises = courseStudents.map((student) => {
             const isPresent = checkedIds.includes(student._id);
 
             const oldHistory = student.attendanceHistory || [];
@@ -1376,6 +1437,95 @@ function closeCourseSummary() {
     disableNoScroll();
 }
 
+function openResetAttendanceSelector() {
+
+    const courses =
+        [...new Set(
+            students.map(s => s.course)
+        )];
+
+    const box =
+        document.getElementById(
+            "resetAttendanceCourseList"
+        );
+
+    box.innerHTML = "";
+
+    courses.forEach(course => {
+
+        box.innerHTML += `
+
+            <button
+            class="course-select-btn"
+            onclick="resetAttendanceByCourse('${course}')">
+
+                ${course}
+
+            </button>
+        `;
+    });
+
+    document
+        .getElementById("resetAttendanceModal")
+        .classList
+        .remove("hidden");
+
+    enableNoScroll();
+}
+
+async function resetAttendanceByCourse(course) {
+
+    const confirmReset =
+        confirm(
+            `Reset attendance for ${course}?`
+        );
+
+    if (!confirmReset) return;
+
+    const courseStudents =
+        students.filter(
+            s => s.course === course
+        );
+
+    for (const student of courseStudents) {
+
+        await fetch(
+            `${API_URL}/api/students/${student._id}`,
+            {
+                method: "PUT",
+
+                headers: {
+                    "Content-Type":
+                        "application/json",
+
+                    Authorization:
+                        `Bearer ${token}`
+                },
+
+                body: JSON.stringify({
+
+                    attendance: {
+                        present: 0,
+                        total: 0
+                    },
+
+                    attendanceHistory: [],
+                    attendanceDates: []
+
+                })
+            }
+        );
+    }
+
+    showToast(
+        `${course} attendance reset successfully`
+    );
+
+    fetchStudents();
+
+    closeResetAttendanceModal();
+}
+
 async function resetAttendance() {
     const confirmReset = confirm(
         "Are you sure you want to reset attendance for all students?"
@@ -1424,6 +1574,15 @@ async function resetAttendance() {
     } catch (error) {
         showToast("Failed to reset attendance", "error");
     }
+}
+
+function closeResetAttendanceModal() {
+    document
+        .getElementById("resetAttendanceModal")
+        .classList
+        .add("hidden");
+
+    disableNoScroll();
 }
 
 function printAllIdCards() {

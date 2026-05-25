@@ -1229,24 +1229,9 @@ function openBulkAttendanceModal(course) {
         `;
     });
 
-    document
-        .getElementById("bulkAttendanceModal")
-        .classList
-        .remove("hidden");
+    document.getElementById("bulkAttendanceModal").classList.remove("hidden");
 
-    document
-        .getElementById("courseAttendanceModal")
-        .classList
-        .add("hidden");
-}
-
-function closeBulkAttendanceModal() {
-    document
-        .getElementById("bulkAttendanceModal")
-        .classList
-        .add("hidden");
-
-    disableNoScroll();
+    document.getElementById("courseModal").classList.add("hidden");
 }
 
 async function saveBulkAttendance() {
@@ -1355,6 +1340,15 @@ async function saveBulkAttendance() {
     }
 }
 
+function closeBulkAttendanceModal() {
+    document
+        .getElementById("bulkAttendanceModal")
+        .classList
+        .add("hidden");
+
+    disableNoScroll();
+}
+
 function showMonthAttendance(studentId) {
 
     const student = students.find(s => s._id === studentId);
@@ -1460,37 +1454,36 @@ function closeCourseSummary() {
 }
 
 function openResetAttendanceSelector() {
+    const courseData = {};
 
-    const courses =
-        [...new Set(
-            students.map(s => s.course)
-        )];
+    students.forEach(student => {
+        const course = student.course || "Unknown";
 
-    const box =
-        document.getElementById(
-            "resetAttendanceCourseList"
-        );
+        if (!courseData[course]) {
+            courseData[course] = [];
+        }
 
-    box.innerHTML = "";
+        courseData[course].push(student);
+    });
 
-    courses.forEach(course => {
+    let html = "";
 
-        box.innerHTML += `
-
-            <button
-            class="course-select-btn"
+    Object.keys(courseData).forEach(course => {
+        html += `
+            <div class="course-summary-card attendance-course-card"
             onclick="resetAttendanceByCourse('${course}')">
 
-                ${course}
+                <h3>${course} (${courseData[course].length})</h3>
+                <p>Click to reset attendance</p>
 
-            </button>
+            </div>
         `;
     });
 
-    document
-        .getElementById("resetAttendanceModal")
-        .classList
-        .remove("hidden");
+    document.getElementById("courseSummaryList").innerHTML =
+        html || "<p>No course data found</p>";
+
+    document.getElementById("courseModal").classList.remove("hidden");
 
     enableNoScroll();
 }

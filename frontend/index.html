@@ -172,6 +172,8 @@
         </section>
 
         <!-- Modals and overlays -->
+        <div class="sidebar-overlay hidden" id="sidebarOverlay" onclick="toggleSidebar()"></div>
+
         <div class="admin-modal hidden" id="adminModal">
             <div class="admin-box">
                 <button class="close-modal" onclick="closeAdminPanel()">×</button>
@@ -187,33 +189,50 @@
             </div>
         </div>
 
-        <div class="sidebar-overlay hidden" id="sidebarOverlay" onclick="toggleSidebar()"></div>
         <div class="about-modal hidden" id="aboutModal">
             <div class="about-box">
                 <div class="about-header">
                     <div class="about-logo">
-                        <i class="ph ph-code"></i>
+                        <i class="ph ph-graduation-cap"></i>
                     </div>
+
                     <div>
-                        <h2>About Developer</h2>
+                        <h2>About StudentInfo</h2>
                         <p class="about-subtitle">Student Management System</p>
                     </div>
                 </div>
+
                 <div class="about-content">
                     <div class="about-item">
-                        <i class="ph ph-user"></i>
-                        <span><b>Developer:</b> Vishal Nayal, Sumit Pandey, Taran Gariya</span>
+                        <i class="ph ph-users-three"></i>
+                        <span><b>Developed By:</b> Vishal Nayal, Sumit Pandey, Taran Singh Gariya</span>
                     </div>
+
                     <div class="about-item">
                         <i class="ph ph-stack"></i>
-                        <span><b>Features:</b> Google Login, CRUD, Attendance, Marks, ID Card, PDF Export</span>
+                        <span><b>Features:</b> Google Login, Manual Login, CRUD, Course-wise Attendance, Marks, ID Cards, PDF/CSV Export, Admin Panel</span>
                     </div>
+
+                    <div class="about-item">
+                        <i class="ph ph-shield-check"></i>
+                        <span><b>Security:</b> JWT Authentication, Google OAuth, Password Hashing</span>
+                    </div>
+
+                    <div class="about-item">
+                        <i class="ph ph-code"></i>
+                        <span><b>Tech Stack:</b> HTML, CSS, JavaScript, Node.js, Express.js, MongoDB</span>
+                    </div>
+
                     <div class="about-item">
                         <i class="ph ph-clock-clockwise"></i>
-                        <span><b>Version:</b> v2.0 Premium UI</span>
+                        <span><b>Version:</b> v3.0 Premium UI</span>
                     </div>
                 </div>
-                <button onclick="closeAbout()"><i class="ph ph-x-circle"></i> Close</button>
+
+                <button onclick="closeAbout()">
+                    <i class="ph ph-x-circle"></i>
+                    Close
+                </button>
             </div>
         </div>
 

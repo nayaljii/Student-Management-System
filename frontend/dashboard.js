@@ -1489,55 +1489,77 @@ function openResetAttendanceSelector() {
 }
 
 async function resetAttendanceByCourse(course) {
+    const today = new Date().toLocaleDateString("en-CA", {
+        timeZone: "Asia/Kolkata"
+    });
 
-    const confirmReset =
-        confirm(
-            `Reset attendance for ${course}?`
-        );
+    const month = new Date().toLocaleString("en-IN", {
+        month: "long",
+        year: "numeric"
+    });
+
+    const confirmReset = confirm(
+        `Reset today's attendance for ${course}?`
+    );
 
     if (!confirmReset) return;
 
-    const courseStudents =
-        students.filter(
-            s => s.course === course
-        );
-
-    for (const student of courseStudents) {
-
-        await fetch(
-            `${API_URL}/api/students/${student._id}`,
-            {
-                method: "PUT",
-
-                headers: {
-                    "Content-Type":
-                        "application/json",
-
-                    Authorization:
-                        `Bearer ${token}`
-                },
-
-                body: JSON.stringify({
-
-                    attendance: {
-                        present: 0,
-                        total: 0
-                    },
-
-                    attendanceHistory: [],
-                    attendanceDates: []
-
-                })
-            }
-        );
-    }
-
-    showToast(
-        `${course} attendance reset successfully`
+    const courseStudents = students.filter(
+        s => s.course === course
     );
 
-    fetchStudents();
+    for (const student of courseStudents) {
+        if (!student.attendanceDates?.includes(today)) {
+            continue;
+        }
 
+        const updatedHistory = (student.attendanceHistory || []).map(item => {
+            if (item.month === month) {
+                return {
+                    ...item,
+                    total: Math.max((item.total || 0) - 1, 0)
+                };
+            }
+
+            return item;
+        });
+
+        const updatedStudent = {
+            name: student.name,
+            fatherName: student.fatherName,
+            rollNo: student.rollNo,
+            course: student.course,
+            semester: student.semester,
+            email: student.email,
+            phone: student.phone,
+            address: student.address,
+            photo: student.photo,
+            marks: student.marks,
+
+            attendance: {
+                present: student.attendance?.present || 0,
+                total: Math.max((student.attendance?.total || 0) - 1, 0)
+            },
+
+            attendanceHistory: updatedHistory,
+
+            attendanceDates: (student.attendanceDates || []).filter(
+                date => date !== today
+            )
+        };
+
+        await fetch(`${API_URL}/api/students/${student._id}`, {
+            method: "PUT",
+            headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${token}`
+            },
+            body: JSON.stringify(updatedStudent)
+        });
+    }
+
+    showToast(`${course} today's attendance reset successfully`);
+    fetchStudents();
     closeCourseSummary();
 }
 

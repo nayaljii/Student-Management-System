@@ -196,7 +196,7 @@ function adminViewStudent(studentId) {
         showToast("Student not found", "error");
         return;
     }
-
+    closeAdminPanel();
     openStudentDetails(student);
 }
 
@@ -251,8 +251,6 @@ async function adminDeleteStudent(studentId, userId, userName) {
 
 function openStudentDetails(student) {
 
-    enableNoScroll();
-
     const present = student.attendance?.present || 0;
     const totalDays = student.attendance?.total || 0;
     const attendancePercent = totalDays > 0 ? ((present / totalDays) * 100).toFixed(1) : 0;
@@ -276,6 +274,7 @@ function openStudentDetails(student) {
         <p><b>Percentage:</b> ${getPercentage(student).toFixed(1)}%</p>
     `;
 
+    enableNoScroll();
     document.getElementById("studentModal").classList.remove("hidden");
 }
 

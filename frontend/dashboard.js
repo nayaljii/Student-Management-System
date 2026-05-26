@@ -23,30 +23,66 @@ const photoPreview = document.getElementById("photoPreview");
 let photoBase64 = "";
 
 photoInput.addEventListener("change", () => {
+
     const file = photoInput.files[0];
 
     if (!file) return;
 
+    if (file.size > 5 * 1024 * 1024) {
+
+        showToast(
+            "Photo size must be less than 5MB",
+            "error"
+        );
+
+        photoInput.value = "";
+
+        return;
+    }
+
     const reader = new FileReader();
 
     reader.onload = (e) => {
+
         const img = new Image();
 
         img.onload = () => {
-            const canvas = document.createElement("canvas");
+
+            const canvas =
+                document.createElement("canvas");
+
             const maxWidth = 300;
-            const scale = maxWidth / img.width;
+
+            const scale =
+                maxWidth / img.width;
 
             canvas.width = maxWidth;
-            canvas.height = img.height * scale;
 
-            const ctx = canvas.getContext("2d");
-            ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+            canvas.height =
+                img.height * scale;
 
-            photoBase64 = canvas.toDataURL("image/jpeg", 0.6);
+            const ctx =
+                canvas.getContext("2d");
 
-            photoPreview.src = photoBase64;
-            photoPreview.style.display = "block";
+            ctx.drawImage(
+                img,
+                0,
+                0,
+                canvas.width,
+                canvas.height
+            );
+
+            photoBase64 =
+                canvas.toDataURL(
+                    "image/jpeg",
+                    0.6
+                );
+
+            photoPreview.src =
+                photoBase64;
+
+            photoPreview.style.display =
+                "block";
         };
 
         img.src = e.target.result;

@@ -28,6 +28,11 @@
                     <p>Student Panel</p>
                 </div>
             </div>
+            <div class="mobile-sidebar-header">
+                <button
+                    class="mobile-sidebar-close" onclick="closeSidebar()"><i class="ph ph-x"></i>
+                </button>
+            </div>
             <button id="adminBtn" class="admin-btn hidden" onclick="openAdminPanel()">
                 <i class="ph ph-shield-check"></i>
                 Admin Panel
@@ -165,12 +170,6 @@
 
         <!-- Modals and overlays -->
         <div class="sidebar-overlay hidden" id="sidebarOverlay" onclick="toggleSidebar()"></div>
-
-        <div class="mobile-sidebar-header">
-            <button
-                class="mobile-sidebar-close" onclick="closeSidebar()"><i class="ph ph-x"></i>
-            </button>
-        </div>
 
         <div class="admin-modal hidden" id="adminModal">
             <div class="admin-box">

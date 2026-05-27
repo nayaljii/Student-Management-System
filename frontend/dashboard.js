@@ -283,8 +283,7 @@ function openStudentDetails(student) {
         <p><b>Email:</b> ${student.email || "-"}</p>
         <p><b>Phone:</b> ${student.phone || "-"}</p>
         <p><b>Address:</b> ${student.address || "-"}</p>
-        <p><b>Attendance:</b> ${present}/${totalDays} (${attendancePercent}%)</p>
-        <p><b>Marks:</b> ${student.marks?.obtained || 0}/${student.marks?.outOf || 100}</p>
+        <p><b>Attendance:</b> ${attendancePercent}%</p>
         <p><b>Percentage:</b> ${getPercentage(student).toFixed(1)}%</p>
     `;
 
@@ -293,11 +292,7 @@ function openStudentDetails(student) {
 }
 
 function closeAdminPanel() {
-    document
-        .getElementById("adminModal")
-        .classList
-        .add("hidden");
-
+    document.getElementById("adminModal").classList.add("hidden");
     document.getElementById("adminStudentList").innerHTML = "";
 
     disableNoScroll();
@@ -325,23 +320,15 @@ async function loadUserStudents(userId, userName) {
         </h3>
 
         ${list.map(student => `
-
             <div class="admin-student-card">
-
                 <div>
-
                     <b>${student.name}</b>
-
                     <span>
-                        ${student.rollNo}
-                        |
-                        ${student.course}
+                        ${student.rollNo} | ${student.course}
                     </span>
-
                 </div>
 
                 <div class="admin-actions">
-
                     <button class="admin-view-btn" onclick="adminViewStudent('${student._id}')">
                         <i class="ph ph-eye"></i>
                     </button>
@@ -350,18 +337,11 @@ async function loadUserStudents(userId, userName) {
                         <i class="ph ph-pencil-simple"></i>
                     </button>
 
-                    <button
-                    class="admin-delete-btn"
-                    onclick="adminDeleteStudent('${student._id}', '${userId}', '${userName}')">
-
+                    <button class="admin-delete-btn" onclick="adminDeleteStudent('${student._id}', '${userId}', '${userName}')">
                         <i class="ph ph-trash"></i>
-
                     </button>
-
                 </div>
-
             </div>
-
         `).join("")}
     `;
 }
@@ -967,14 +947,8 @@ function openStudentModal(studentId) {
 
         <p>
             <b>Attendance:</b>
-
             <span
-            class="attendance-link"
-            onclick="showMonthAttendance('${student._id}')">
-
-                ${present}/${totalDays}
-                (${attendancePercent}%)
-
+                class="attendance-link" onclick="showMonthAttendance('${student._id}')">${attendancePercent}%
             </span>
         </p>
 

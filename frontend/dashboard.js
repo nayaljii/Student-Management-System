@@ -20,7 +20,15 @@ const formSection = document.getElementById("formSection");
 const photoInput = document.getElementById("photo");
 const photoPreview = document.getElementById("photoPreview");
 
+let students = [];
+let adminCurrentStudents = [];
+let currentFilteredStudents = [];
 let photoBase64 = "";
+let selectedAttendanceCourse = "";
+let deleteStudentId = null;
+
+let currentPage = 1;
+const studentsPerPage = 5;
 
 photoInput.addEventListener("change", () => {
 
@@ -47,42 +55,22 @@ photoInput.addEventListener("change", () => {
         const img = new Image();
 
         img.onload = () => {
-
-            const canvas =
-                document.createElement("canvas");
-
+            const canvas = document.createElement("canvas");
             const maxWidth = 300;
-
-            const scale =
-                maxWidth / img.width;
+            const scale = maxWidth / img.width;
 
             canvas.width = maxWidth;
+            canvas.height = img.height * scale;
 
-            canvas.height =
-                img.height * scale;
+            const ctx = canvas.getContext("2d");
 
-            const ctx =
-                canvas.getContext("2d");
+            ctx.drawImage( img, 0, 0, canvas.width, canvas.height );
 
-            ctx.drawImage(
-                img,
-                0,
-                0,
-                canvas.width,
-                canvas.height
-            );
+            photoBase64 = canvas.toDataURL( "image/jpeg", 0.6 );
 
-            photoBase64 =
-                canvas.toDataURL(
-                    "image/jpeg",
-                    0.6
-                );
+            photoPreview.src = photoBase64;
 
-            photoPreview.src =
-                photoBase64;
-
-            photoPreview.style.display =
-                "block";
+            photoPreview.style.display = "block";
         };
 
         img.src = e.target.result;
@@ -91,17 +79,7 @@ photoInput.addEventListener("change", () => {
     reader.readAsDataURL(file);
 });
 
-let adminCurrentStudents = [];
 
-let students = [];
-let currentFilteredStudents = [];
-
-let selectedAttendanceCourse = "";
-
-let currentPage = 1;
-const studentsPerPage = 5;
-
-let deleteStudentId = null;
 
 if (userInfo && user) {
     userInfo.innerText = `Welcome, ${user.name}`;
@@ -199,9 +177,9 @@ studentForm.addEventListener("submit", async (e) => {
 
 async function openAdminPanel() {
 
-    enableNoScroll();
-
+    closeSidebar();
     document.getElementById("adminModal").classList.remove("hidden");
+    enableNoScroll();
 
     const res = await fetch(`${API_URL}/api/admin/users`, {
         headers: {
@@ -961,10 +939,7 @@ function openStudentModal(studentId) {
     const present = student.attendance?.present || 0;
     const totalDays = student.attendance?.total || 0;
 
-    const attendancePercent =
-        totalDays > 0
-            ? ((present / totalDays) * 100).toFixed(1)
-            : 0;
+    const attendancePercent = totalDays > 0 ? ((present / totalDays) * 100).toFixed(1) : 0;
 
     document.getElementById("studentDetails").innerHTML = `
         ${student.photo
@@ -1004,15 +979,7 @@ function openStudentModal(studentId) {
         </p>
 
         <p>
-            <b>Marks:</b>
-            ${student.marks?.obtained || 0}
-            /
-            ${student.marks?.outOf || 100}
-        </p>
-
-        <p>
             <b>Percentage:</b>
-            ${student.marks?.obtained || 0}/${student.marks?.outOf || 100}
             ${getPercentage(student).toFixed(1)}%
         </p>
     `;

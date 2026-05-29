@@ -1488,9 +1488,11 @@ async function resetAttendanceByCourse(course) {
     );
 
     for (const student of courseStudents) {
-        if (!student.attendanceDates?.includes(today)) {
-            continue;
-        }
+        const todayRecord = student.dailyAttendance?.find(
+            item => item.date === today
+        );
+
+        if (!todayRecord) continue;
 
         const updatedHistory = (student.attendanceHistory || []).map(item => {
             if (item.month === month) {
@@ -1523,19 +1525,19 @@ async function resetAttendanceByCourse(course) {
                 marks: student.marks,
 
                 attendance: {
-                    present: Math.max((student.attendance?.present || 0) - 1, 0),
+                    present: Math.max((student.attendance?.present || 0) - (todayRecord.status === "Present" ? 1 : 0), 0),
                     total: Math.max((student.attendance?.total || 0) - 1, 0)
                 },
 
                 attendanceHistory: updatedHistory,
 
-                attendanceDates: (student.attendanceDates || []).filter(
-                    date => date !== today
+                dailyAttendance: (student.dailyAttendance || []).filter(
+                    item => item.date !== today
                 )
             })
         });
     }
-    
+
     showToast(`${course} today's attendance reset successfully`);
     fetchStudents();
     closeCourseSummary();

@@ -33,12 +33,8 @@ const studentSchema = new mongoose.Schema({
 
     dailyAttendance: [
         {
-            date: "2026-05-29",
-            status: "Present"
-        },
-        {
-            date: "2026-05-30",
-            status: "Absent"
+            date: String,
+            status: String
         }
     ],
 

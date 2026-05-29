@@ -31,7 +31,16 @@ const studentSchema = new mongoose.Schema({
         }
     ],
 
-    attendanceDates: [String],
+    dailyAttendance: [
+        {
+            date: "2026-05-29",
+            status: "Present"
+        },
+        {
+            date: "2026-05-30",
+            status: "Absent"
+        }
+    ],
 
     marks: {
         obtained: { type: Number, default: 0 },

@@ -283,6 +283,52 @@ body.sidebar-open {
     background: linear-gradient(135deg, #2563eb, #7c3aed);
 }
 
+.developer-socials{
+    display:flex;
+    justify-content:center;
+    gap:15px;
+    margin:20px 0;
+    flex-wrap:wrap;
+}
+
+.social-btn{
+    width:55px;
+    height:55px;
+    border-radius:50%;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    text-decoration:none;
+    color:#fff;
+    font-size:24px;
+    transition:.3s;
+}
+
+.social-btn:hover{
+    transform:translateY(-5px) scale(1.1);
+}
+
+.linkedin{
+    background:#0077b5;
+}
+
+.github{
+    background:#24292e;
+}
+
+.instagram{
+    background:linear-gradient(
+        45deg,
+        #f58529,
+        #dd2a7b,
+        #8134af
+    );
+}
+
+.whatsapp{
+    background:#25d366;
+}
+
 .logout-btn {
     background: linear-gradient(135deg, #ef4444, #f97316);
 }
